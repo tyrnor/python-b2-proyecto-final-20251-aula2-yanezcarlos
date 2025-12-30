@@ -34,7 +34,6 @@ Para elaborar una solución que consolide las bases de datos de estas institucio
 - **Exploración de datos:** Realizar un análisis exploratorio de los datos para comprender mejor su estructura, distribución y características. Esto puede incluir la visualización de datos y la identificación de posibles patrones o relaciones.
 - **Ingesta de datos:** Integrar las bases de datos de las instituciones financieras en un único repositorio de datos, asegurando que la información se pueda acceder de manera eficiente y segura.
 - **Procesamiento de datos:** Realizar transformaciones adicionales en los datos según sea necesario, como la codificación de variables categóricas, la normalización de características numéricas y la manipulación de valores faltantes.
-- Claro, aquí tienes el texto corregido:
 - **Desarrollo de modelos para clasificar los tipos de financiamiento:** Seleccionar y entrenar algoritmos de clasificación adecuados para el problema de clasificación de tipos de financiamiento. Esto puede incluir técnicas como algoritmos de clasificación supervisada, tales como Support Vector Machines, Random Forests o redes neuronales.
 - **Validación del modelo:** Evaluar el rendimiento de los modelos utilizando métricas adecuadas, como precisión, recall, F1-score, etc. Utilizar técnicas como la validación cruzada para garantizar la generalización del modelo.
 - **Optimización del modelo:** Ajustar hiperparámetros y realizar selección de características para optimizar el rendimiento de los modelos.
