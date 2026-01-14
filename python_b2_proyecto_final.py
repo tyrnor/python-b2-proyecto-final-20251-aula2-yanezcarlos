@@ -10,10 +10,10 @@ Original file is located at
 
 ## **Información del estudiante**
 ---
-* **Título**:
-* **Autor**:
-* **Correo**:
-* **Fecha**:
+* **Título**: Proyecto Final - B2
+* **Autor**: Carlos Yañez Puig
+* **Correo**: cyanezu@uoc.edu
+* **Fecha**: 14/01/2025
 * **Salida**: ipynb, predicciones.csv
 ---
 
@@ -466,9 +466,63 @@ La preparación de datos es un paso crucial en el proceso de análisis de datos.
 ##Recopilar Información
 ## Preguntas
 * *¿Cuáles son los desafíos clave al integrar y analizar datos de diferentes instituciones financieras para desarrollar sistemas de recomendación de seguros?*
+
+    Uno de los principales desafíos es la heterogeneidad de los datos, ya que cada institución
+    financiera puede utilizar distintos formatos, estructuras y criterios para almacenar la
+    información de los clientes. Esto obliga a realizar un proceso de normalización y limpieza
+    previo al análisis.
+
+    Otro desafío importante es la calidad de los datos, ya que pueden existir valores faltantes,
+    duplicados o inconsistencias que afecten al rendimiento de los modelos de machine learning.
+
+    Además, la integración de datos requiere identificar correctamente un atributo común que
+    permita relacionar los registros de un mismo cliente entre distintas entidades, evitando
+    errores de emparejamiento.
+
+    Por último, también es relevante considerar aspectos de privacidad y seguridad, asegurando
+    que el tratamiento de los datos se realice de forma responsable y conforme al consentimiento
+    del usuario.
+
 * *¿De qué manera podría su participación en el desarrollo de nuevas fuentes de información de seguros en el marco de Open Finance promover la transparencia y autonomía de los usuarios del sistema financiero?*
+
+    La participación en el desarrollo de nuevas fuentes de información de seguros dentro del
+    marco de Open Finance permite que los usuarios tengan un mayor control sobre sus propios
+    datos financieros.
+
+    Al centralizar y compartir información de forma estandarizada, los usuarios pueden comparar
+    productos de distintas entidades, entender mejor sus opciones y tomar decisiones más
+    informadas.
+
+    Esto promueve la transparencia del sistema financiero y reduce la dependencia de una única
+    institución, fomentando la competencia y la innovación en los servicios ofrecidos.
+
 * *¿Cuál es la similitud entre Open Finance y otras fuentes de datos financieros abiertos, como Open Banking y Open Insurance, y cómo benefician a los usuarios del sistema financiero en términos de transparencia y acceso a información?*
+
+    Open Finance, Open Banking y Open Insurance comparten el objetivo de permitir el acceso y
+    la portabilidad de los datos financieros de los usuarios entre diferentes proveedores,
+    siempre con su consentimiento.
+
+    Estas iniciativas se basan en el uso de estándares abiertos y APIs para facilitar el
+    intercambio de información de forma segura y transparente.
+
+    Gracias a ello, los usuarios obtienen una visión más completa de su situación financiera,
+    pueden acceder a mejores productos y servicios, y se incrementa la competencia entre las
+    entidades financieras.
+
 * *¿Qué aspectos clave deberías revisar al explorar los datos de GFT Open Finance para entender su contenido, formato y posibles problemas, y cómo estos podrían afectar el desarrollo de modelos de machine learning para recomendaciones de seguros?*
+
+    Al explorar los datos es fundamental revisar la estructura del dataset, el significado de
+    cada variable y los tipos de datos asociados a cada columna.
+
+    También es importante analizar la presencia de valores nulos, duplicados o inconsistencias,
+    ya que estos pueden introducir sesgos o errores en los modelos de machine learning.
+
+    Otro aspecto clave es estudiar la distribución de las variables y posibles desbalances entre
+    clases, lo que puede afectar al rendimiento de los modelos de clasificación.
+
+    Una correcta exploración permite tomar decisiones informadas sobre la limpieza, el
+    preprocesamiento y la selección de características necesarias para desarrollar modelos de
+    recomendación fiables.
 
 ## Exploración Inicial
 
@@ -476,17 +530,23 @@ Comencemos importando los diferentes conjuntos de datos como dataframes utilizan
 """
 
 #Write your code here
-df_retailbank = pd.read_csv("change_path_to_RetailBankEFG")
+df_retailbank = pd.read_csv("data/RetailBankEFG.csv")
+print("RetailBankEFG - First 10 records")
+print(df_retailbank.head(10))
 
 """*Realiza la misma acción para InvestmentBankCDE.csv.*"""
 
 #Write your code here
-df_investment = pd.read_csv("change_path_to_InvestmentBankCDE")
+df_investment = pd.read_csv("data/InvestmentBankCDE.csv")
+print("InvestmentBankCDE - First 10 records")
+print(df_investment.head(10))
 
 """*Realiza la misma acción para InvestmentBankCDE.csv.*"""
 
 #Write your code here
-df_insurance = pd.read_csv("change_path_to_InsuranceCompanyABC")
+df_insurance = pd.read_csv("data/InsuranceCompanyABC.csv")
+print("InsuranceCompanyABC - First 10 records")
+print(df_insurance.head(10))
 
 """## Pregunta
 *¿Puedes identificar un atributo común entre los diferentes conjuntos de datos que permita juntarlos?*
