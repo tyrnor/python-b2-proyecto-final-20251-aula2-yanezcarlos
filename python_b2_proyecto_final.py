@@ -569,10 +569,31 @@ Indica cuál es la cantidad de registros en cada conjunto de datos.
 *¿Qué conclusiones puedes sacar luego de observar los resultados?*
 """
 
-#Write your code here
+print("RetailBankEFG - Number of records:", df_retailbank.shape[0])
+print("InvestmentBankCDE - Number of records:", df_investment.shape[0])
+print("InsuranceCompanyABC - Number of records:", df_insurance.shape[0])
+
+# Todos los datasets tienen la misma cantidad de registros (10082), lo que sugiere que representan el mismo conjunto de clientes.
+# Esto facilita la integración de los datos, ya que cada cliente tiene información disponible en las tres instituciones financieras.
 
 """## Pregunta
 ¿Has notado algún patrón entre los datos, ya sea entre filas o columnas?
+
+# A partir de la exploración inicial de los datos, se pueden observar varios patrones interesantes:
+# En primer lugar, muchas columnas de los datasets RetailBankEFG e InvestmentBankCDE representan
+# productos financieros mediante valores binarios ('T' / 'F'), lo que indica si un cliente ha 
+# contratado o no un determinado producto.
+
+# Además, se observa que algunos clientes tienden a tener más de un producto financiero, lo que
+# sugiere la existencia de posibles relaciones o correlaciones entre distintos tipos de financiamiento e inversión.
+
+# En el dataset InsuranceCompanyABC, conviven variables númericas como la edad y la renta con variables categóricas
+# como la región o los rangos de edad e ingresos. Esto sugiere que la información demográfica puede influir en la 
+# contratación de productos fiancieros y seguros.
+
+# En general, los datos presentan una estructura consistente, donde cada fila representa a un cliente
+# y cada columna un atributo o producto específico, lo cual es adecuado para un análisis posterior y 
+# para el desarrollo de modelos de machine learning.
 
 # Evaluación de Calidad de Datos
 
@@ -591,13 +612,26 @@ def get_nan_values(data_frame):
 """*Imprime los valores faltantes por fila y columna*"""
 
 #Write your code here for df_retailbank
-
+print("NaN values in RetailBankEFG")
+nan_retail = get_nan_values(df_retailbank)
+print(nan_retail["Count NaN values in each column"])
+print("Total number of records with NaN values:", nan_retail["Total number of records with NaN values"])
 #Write your code here for df_investment
-
+print("NaN values in InvestmentBankCDE")
+nan_investment = get_nan_values(df_investment)
+print(nan_investment["Count NaN values in each column"])
+print("Total number of records with NaN values:", nan_investment["Total number of records with NaN values"])
 #Write your code here for df_insurance
+print("NaN values in InsuranceCompanyABC")
+nan_insurance = get_nan_values(df_insurance)
+print(nan_insurance["Count NaN values in each column"])
+print("Total number of records with NaN values:", nan_insurance["Total number of records with NaN values"])
 
 """## Pregunta
 *¿Existen valores faltantes en los datos?*
+
+No existen valores faltantes en los datos de los tres datasets, ya que el conteo de valores NaN por columna es cero y el total
+de registros con valores NaN también es cero en cada uno de ellos.
 
 ## Duplicados
 Vamos a detectar si existen filas duplicadas que pueden distorsionar los análisis. Para ello, vamos a validar si hay registros duplicados en el conjunto de datos utilizando la función `check_duplicates`. En caso afirmativo, necesitaremos pasar como parámetros el dataframe a validar y la columna que se utiliza como identificador.
