@@ -552,7 +552,16 @@ print(df_insurance.head(10))
 *¿Puedes identificar un atributo común entre los diferentes conjuntos de datos que permita juntarlos?*
 """
 
-#Write your code here
+common_attributes = (
+    set(df_retailbank.columns) &
+    set(df_investment.columns) &
+    set(df_insurance.columns)
+)
+print("Common attributes between datasets:", common_attributes)
+
+# El atributo común entre los diferentes datasets es "ID" e identifica de manera única a cada cliente. 
+# Además, este puede usarse como clave para fusionar los datasets y consolidar la información de cada cliente proveniente de las distintas instituciones financieras.
+
 
 """## Pregunta
 Indica cuál es la cantidad de registros en cada conjunto de datos.
