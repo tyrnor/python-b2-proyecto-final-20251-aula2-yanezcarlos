@@ -659,9 +659,19 @@ def check_duplicates(data_frame, column):
 """*Imprime la cantidad de filas duplicadas para df_retailbank, df_investment y df_insurance*"""
 
 #Write your code here
-
+print("Duplicate rows in RetailBankEFG (by ID):", check_duplicates(df_retailbank, 'ID'))
+print("Duplicate rows in InvestmentBankCDE (by ID):", check_duplicates(df_investment, 'ID'))
+print("Duplicate rows in InsuranceCompanyABC (by ID):", check_duplicates(df_insurance, 'ID'))
 """## Pregunta
 ¿Existen datos duplicados?
+
+Sí, existen datos duplicados en los tres datasets si se analiza la comuna ID como identificador.
+Existen 552 IDs duplicados en cada uno de los conjuntos de datos, lo que indica que algunos clientes
+aparecen más de una vez.
+
+Esto no implica un error en los datos, ya que un cliente puede tener múltiples productos financieros o seguros
+registrados. Sin embargo, es importante tener en cuenta estos duplicados al realizar análisis posteriores
+o al desarrollar modelos de machine learning, ya que pueden influir en los resultados si no se manejan adecuadamente.
 
 ## Inconsistencias
 En esta sección, se propondrán varios métodos para identificar inconsistencias en los datos. Primero, vamos a revisar las estadísticas básicas. Para ello, utilizaremos la función `describe()`.
