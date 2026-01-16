@@ -680,10 +680,14 @@ En esta sección, se propondrán varios métodos para identificar inconsistencia
 """
 
 #Write your code here for df_retailbank
-
+print("Basic statistics for RetailBankEFG:")
+print(df_retailbank.describe(include="all").T)
 #Write your code here for df_investment
-
+print("Basic statistics for InvestmentBankCDE:")
+print(df_investment.describe(include="all").T)
 #Write your code here for df_insurance
+print("Basic statistics for InsuranceCompanyABC:")
+print(df_insurance.describe(include="all").T)
 
 """### Identificar Valores Únicos:
 Ahora, para todas las variables no numéricas, debemos identificar cuántos tipos de datos están registrados en cada columna. Implementaremos la función `get_value_counts_non_numeric_columns`, la cual obtiene los conteos de valores de las columnas no numéricas en un DataFrame y devuelve un diccionario donde las claves son los nombres de las columnas no numéricas y los valores son sus respectivos conteos de valores.
@@ -715,18 +719,36 @@ def get_value_counts_non_numeric_columns(df):
     """
     # write your code here
     #Get non-numeric columns
-    #pass
+    non_numeric_columns = find_non_numeric_columns(df)
+    value_counts_dict = {}
+
+    for col in non_numeric_columns:
+        value_counts_dict[col] = df[col].value_counts()
+    
+    return value_counts_dict
 
 """*Imprime los conteos de las columnas no numéricas.*"""
 
 #Write your code here for df_retailbank
-get_value_counts_non_numeric_columns(df_retailbank)
+print("Value counts for non-numeric columns in RetailBankEFG:")
+retail_counts = get_value_counts_non_numeric_columns(df_retailbank)
+for col, counts in retail_counts.items():
+    print(f"Column: {col}")
+    print(counts)
 
 #Write your code here for df_investment
-get_value_counts_non_numeric_columns(df_investment)
+print("Value counts for non-numeric columns in InvestmentBankCDE:")
+investment_counts = get_value_counts_non_numeric_columns(df_investment)
+for col, counts in investment_counts.items():
+    print(f"Column: {col}")
+    print(counts)
 
 #Write your code here for df_insurance
-get_value_counts_non_numeric_columns(df_insurance)
+print("Value counts for non-numeric columns in InsuranceCompanyABC:")
+insurance_counts = get_value_counts_non_numeric_columns(df_insurance)
+for col, counts in insurance_counts.items():
+    print(f"Column: {col}")
+    print(counts)
 
 """### Verificar Tipos de Datos:
 *Utiliza el atributo `dtypes` para verificar los tipos de datos de cada columna.*
