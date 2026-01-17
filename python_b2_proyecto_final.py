@@ -766,7 +766,12 @@ print(df_insurance.dtypes)
 
 """## Pregunta
 *¿Qué puedes concluir respecto de todas las variables que no son numéricas?*
+Las variables no numéricas en los distintos datasets son de tipo categórico y se almacenan como objetos (object),
+principalmente en forma de valores binarios (T/F) que indican la contratación o no de productos financieros o seguros.
+
 *¿Has identificado algún patrón o característica?*
+Sí, se observa que estas variables presentan un número reducido y bien definido de categorías, sin valores inconsistentes, lo que 
+facilita su transformación a formato númerico mediante técnicas de codificación para su posterior uso en modelos de machine learning.
 
 ## Visualización General de los datos y Analizar Patrones Anómalos
 Esta es una sección libre en la que podrás crear diferentes visualizaciones de los datos. Sugiero que utilices principalmente visualizaciones para validar la cantidad de datos de las variables no numéricas. Además, debes realizar gráficas tipo box plot para las columnas numéricas, exceptuando la columna ID.
