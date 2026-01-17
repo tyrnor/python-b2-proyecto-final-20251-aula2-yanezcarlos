@@ -786,15 +786,36 @@ Esta es una sección libre en la que podrás crear diferentes visualizaciones de
 """
 
 #Write your code here, add your custom plots for df_retailbank
-
+df_retailbank["Financiamento Casa"].value_counts().plot(kind="bar", title="Financiamiento Casa")
+plt.show()
 #Write your code here, add your custom plots for df_investment
-
+df_investment["Investimento Poupanca"].value_counts().plot(kind="bar", title="Investimento Poupanca")
+plt.show()
 #Write your code here, add your custom plots for df_insurance
+df_insurance["Regiao"].value_counts().plot(kind="bar", title="Regiao")
+plt.show()
+
+numeric_columns = ["Idade", "Renda"]
+df_insurance[numeric_columns].boxplot()
+plt.title("Box plots for numeric variables")
+plt.show()
 
 """## Preguntas
 1. *¿Cuál de las dos opciones sugieres utilizar para evaluar datos no numéricos: imprimir los valores o crear visualizaciones?*
+
+Para evaluar datos no numéricos considero más adecuado crear visualizaciones que únicamente imprimir los valores,
+ya que los gráficos permiten identificar de forma más rápida patrones, desbalances y distribuciones entre las categorías.
+
 2. *¿Qué otros tipos de visualizaciones se te ocurren que podrías sugerir? Justifica tu respuesta.*
+
+Otros tipos de visualizaciones que podrían utilizarse son gráficos de barras apiladas para comparar categorías entre distintos grupos,
+o mapas de calor para analizar relaciones entre variables categóricas una vez codificadas.
+
 3. *¿Existe un desbalance en los datos, es decir, existen más tipos que corresponden a una clase? ¿Cuál es la clase y cómo crees que esto puede afectar al construir modelos de machine learning?*
+
+Sí, existe un desbalance en los datos, ya que en la mayoría de las variables categóricas predomina la clase "F" frente
+a la positiva ("T"). Este desbalance puede afectar a los modelos de machine learning, haciendo que tiendan a predecir
+la clase mayoritaria, por lo que será importante tenerlo en cuenta durante el entrenamiento y la evaluación del modelo.
 
 ### Analizar Patrones Anómalos:
 Para realizar el análisis de patrones anómalos, utilizarás la función `plot_boxplot_violinplot`.
