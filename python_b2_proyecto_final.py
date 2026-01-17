@@ -755,10 +755,14 @@ for col, counts in insurance_counts.items():
 """
 
 #Write your code here for df_retailbank
-
+print("Data types for RetailBankEFG:")
+print(df_retailbank.dtypes)
 #Write your code here for df_investment
-
+print("Data types for InvestmentBankCDE:")
+print(df_investment.dtypes)
 #Write your code here for df_insurance
+print("Data types for InsuranceCompanyABC:")
+print(df_insurance.dtypes)
 
 """## Pregunta
 *¿Qué puedes concluir respecto de todas las variables que no son numéricas?*
