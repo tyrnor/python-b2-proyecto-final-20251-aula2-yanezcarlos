@@ -1050,11 +1050,17 @@ class OutlierRemover(BaseEstimator, TransformerMixin):
 
 #Write your code here
 
+outlier_remover = OutlierRemover(threshold=1.5, columns=["Idade", "Renda"])
+
+df_insurance = outlier_remover.fit_transform(df_insurance)
+
 """## Pregunta
 Después de eliminar los datos atípicos, ¿cuántos registros tiene ahora el DataFrame `df_insurance`?
 """
 
 #Write your code here
+
+print("Number of records after removing outliers:", df_insurance.shape[0])
 
 """## Pregunta
 *Explica con tus propias palabras cómo podría afectar una diferencia significativa en el tamaño del conjunto de datos antes y después de eliminar los valores atípicos. ¿Qué implicaciones podría tener esto en los resultados de un modelo de machine learning?*
