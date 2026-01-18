@@ -884,10 +884,22 @@ completos.
 """
 
 #Write your code here
+df_retailbank.drop_duplicates(subset="ID", inplace=True)
+df_investment.drop_duplicates(subset="ID", inplace=True)
+df_insurance.drop_duplicates(subset="ID", inplace=True)
+
+print("RetailBankEFG shape after removing duplicates:", df_retailbank.shape)
+print("InvestmentBankCDE shape after removing duplicates:", df_investment.shape)
+print("InsuranceCompanyABC shape after removing duplicates:", df_insurance.shape)
+
 
 """## Pregunta
 
 *¿Por qué es importante llevar a cabo la tarea de eliminación de duplicados? Por favor, justifica tu respuesta.*
+
+Es importante eliminar duplicados para garantizar que cada cliente esté representado una sola vez en el conjunto de datos,
+evitando que un mismo identificador (ID) aparezca repetido y genere sesgos en el análisis y en el entrenamiento de los
+modelos de machine learning.
 
 # Ingeniería de características
 
