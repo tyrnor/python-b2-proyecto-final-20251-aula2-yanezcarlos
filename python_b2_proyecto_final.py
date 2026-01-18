@@ -833,6 +833,16 @@ plot_boxplot_violinplot(x="Regiao", y="Renda", data_frame=df_insurance)
 * *¿Cuál es la distribución de datos sugerida?*
 * *¿Existen datos atípicos en el conjunto de datos?* *¿Cómo podrías corregir estos datos? Justifica tu respuesta*.
 
+La distribución de los datos muestra que la variable edad tiene una distribución similar entre las distintas regiones, con
+medianas cercanas y una dispersión moderada.
+
+En el caso de la renta, la distribución es claramente asimétrica, con una alta concentración de valores bajos y la 
+presencia de valores atípicos elevedaos en varias regiones.
+
+Estos valores atípicos no necesariamente representan errores, pero pueden influir negativamente en el rendimiento de los 
+modelos de machine learning. Para mitigar el impacto, podrían aplicarse técnica como la transformación logarítmica de 
+la variable renta, la normalización de los datos o el tratamiento específico de outliers mediante recorte o escalado robusto.
+
 # **Pregunta 2 - Limpieza y tratamiento de Datos**
 
 # Limpieza de Datos
@@ -841,9 +851,30 @@ plot_boxplot_violinplot(x="Regiao", y="Renda", data_frame=df_insurance)
 
 ### Preguntas
 1. *¿Luego de la evaluación es necesario realizar alguna técnica para completar datos faltantes?*
+
+No es necesario aplicar técnicas para completar valores faltantes, ya que no se han detectado  valores nulos en 
+ninguno de los conjuntos de datos analizados.
+
 2. *¿Debemos realizar tareas de imputación de valores luego de analizar los datos?*
+
+No es necesario realizar tareas de imputación de valores, dado que los datos presentan una buena calidad y no
+contienen valores faltantes que deban ser tratados antes del análisis o modelado posterior.
+
 3. *¿Por favor, describe al menos dos técnicas de imputación de datos para valores faltantes basadas en métodos estadísticos?*
+
+Imputación por la media/mediana: consiste en reemplazar los valores faltantes por la media o la mediana de la variable, siendo
+la mediana más robusta frente valores atípicos.
+
+Imputación por la moda: utilizada principalmente en variables categóricas, donde los valores faltantes se reemplazan por el valor
+más frecuente.
+
 4. *¿Por favor, describe al menos dos técnicas de imputación de datos para valores faltantes basadas en métodos predictivos?*
+
+Imputación mediante modelos de regresión: se entrena un modelo predictivo para estimar los valores faltantes a partir de otras variables
+del conjunto de datos.
+
+Imputación utilizando algortimos de machine learning como k-NN, que estima los valores faltantes en función de la similitud con otros registros
+completos.
 
 ## Eliminación de Duplicados
 
