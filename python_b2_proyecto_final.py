@@ -824,11 +824,11 @@ Para realizar el análisis de patrones anómalos, utilizarás la función `plot_
 """
 
 #Write your code here for df_insurance
-
+plot_boxplot_violinplot(x="Regiao", y="Idade", data_frame=df_insurance)
 """ *Graficar la región(Regiao) en función de la edad(Renda), del conjunto de datos `df_insurance`.*"""
 
 #Write your code here for df_insurance
-
+plot_boxplot_violinplot(x="Regiao", y="Renda", data_frame=df_insurance)
 """## Preguntas
 * *¿Cuál es la distribución de datos sugerida?*
 * *¿Existen datos atípicos en el conjunto de datos?* *¿Cómo podrías corregir estos datos? Justifica tu respuesta*.
