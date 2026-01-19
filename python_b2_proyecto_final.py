@@ -1611,7 +1611,7 @@ A continuación, desarrolla los siguientes pasos para cada uno de los modelos so
 
 * **Validación del modelo:** Evalúa el rendimiento del modelo utilizando el conjunto de prueba. Esto te permite verificar si el modelo generaliza bien a datos no vistos y detectar posibles problemas de sobreajuste o subajuste.
 
-### **Pasos para el entrenamiento del modelo - (Nombre Modelo)**
+### **Pasos para el entrenamiento del modelo - (Random Forest)**
 """
 
 # Load your dataset
@@ -1619,33 +1619,51 @@ A continuación, desarrolla los siguientes pasos para cada uno de los modelos so
 # and the target variable is in a column called 'tipo_financiamiento'
 # Replace 'data_frame_tipo_financiamiento' and 'tipo_financiamiento' with your actual DataFrame and column names
 # Write you code here
+X = data_frame_tipo_financiamiento.drop(columns=["tipo_financiamiento"])
+y = data_frame_tipo_financiamiento["tipo_financiamiento"]
 
 # Split the data into training and testing sets using startified_train_test_split
 # You can adjust the test_size parameter as needed
 # 'random_state' ensures reproducibility of results
 # Write you code here
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+)
 
 # Create the custom model
 # You can customize the parameters based on your requirements
 # Write you code here
+rf_model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
 
 # Train the model on the training data
 # Write you code here
+rf_model.fit(X_train, y_train)
 
 # Make predictions on the testing data
 # Write you code here
+y_pred_rf = rf_model.predict(X_test)
 
-"""### **Evaluación del modelo - (Nombre Modelo)**"""
+"""### **Evaluación del modelo - (Random Forest)**"""
 
 # Evaluate accuracy the model
 # Write you code here
+accuracy_rf = accuracy_score(y_test, y_pred_rf)
+print("Accuracy Random Forest:", accuracy_rf)
 
 # Plot accuracy the model over the time - use plot_accuracy_scores
-# plot_accuracy_scores(rf_model,X_train,y_train,X_test,y_test,nparts=5,jobs=2)
+plot_accuracy_scores(rf_model,X_train,y_train,X_test,y_test,nparts=5,jobs=2)
 
 # Print classifitacion report using classification_report
+print(classification_report(y_test, y_pred_rf, digits=6))
 
 # Plot confusion matrix using plot_confusion_matrix
+plot_confusion_matrix(confusion_matrix(y_test, y_pred_rf), tipo_financiamiento_mapping)
 
 """### **Pasos para el entrenamiento del modelo  a comparar - (LogisticRegression)**"""
 
@@ -1673,7 +1691,6 @@ lr_model = LogisticRegression(
     intercept_scaling=1,
     l1_ratio=None,
     max_iter=1000,
-    multi_class="multinomial",
     n_jobs=None,
     penalty="l2",
     random_state=1355,
@@ -1707,7 +1724,21 @@ plot_confusion_matrix(confusion_matrix(y_test, y_pred), tipo_financiamiento_mapp
 
 """## Preguntas
 * *¿Puedes comparar los modelos y determinar cuál de ellos tiene un mejor rendimiento en términos de exactitud?*
+
+Ambos modelos presentan valores de exactitud similares, cercanos al 76%. Sin embargo, Random Forest
+resulta ligeramente más robusto al capturar relaciones no lineales, mientras que Logistic Regression
+tiene un comportamiento más simple y estable, aunque más sesgado hacia la clase mayoritaria.
+
 * *¿Logran los modelos etiquetar todas las clases de forma precisa? ¿Qué estrategias podrían aplicarse para mejorar este aspecto?*
+
+No, los modelos no logran etiquetar todas las clases de forma precisa. Las clases minoritarias presentan valores muy bajos dde recall y,
+en algunos casos, no son correctamente predichas. Esto se debe al desbalance existente en los datos.
+
+Para mejorar este aspecto se pueden aplicar las siguientes estrategias:
+- Ajustar el parámetro class_weight en los modelos.
+- Utilizar técnicas de balanceo de datos como oversampling o SMOTE.
+- Optimizar hiperparámetros.
+- Probar modelos adicionales más sensibles al desbalance.
 
 ## Extracción de características y Análisis de Componentes Principales(PCA)
 
