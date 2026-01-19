@@ -1171,17 +1171,27 @@ Vamos a unificar diferentes conjuntos de datos (`df_insurance`, `df_retailbank` 
 
 # Write you code here
 
+data_frame_merged = df_insurance.merge(df_retailbank, on="ID", how="inner").merge(df_investment, on="ID", how="inner")
+
+print(data_frame_merged.head(10))
+
 """*Imprime la cantidad total de registros después de realizar el merge entre los conjuntos de datos.*"""
 
 # Write you code here
+
+print("Total number of records after merge:", data_frame_merged.shape[0])
 
 """*Observamos una visión estadística rápida de los datos mediante la función `describe`.*"""
 
 # Write you code here
 
+print(data_frame_merged.describe())
+
 """*Verifica si hay datos faltantes en el DataFrame resultante.*"""
 
 # Write you code here
+print("Missing values per column after merge:")
+print(data_frame_merged.isna().sum())
 
 """# Correcion nombres columnas
 
