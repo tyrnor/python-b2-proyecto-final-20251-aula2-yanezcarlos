@@ -1126,7 +1126,12 @@ class DataScaleImputer(BaseEstimator, TransformerMixin):
 
         # Create a ColumnTransformer that will apply StandardScaler only to the specified columns
         # Write you code here, change None by custom transformer
-        transformer = None
+        transformer = ColumnTransformer(
+            transformers=[
+                ("scaler", self.scaler, self.columns)
+            ],
+            remainder="drop"
+        )
 
         # Apply the transformer to the data
         X_transform = transformer.fit_transform(data)
@@ -1142,13 +1147,20 @@ class DataScaleImputer(BaseEstimator, TransformerMixin):
 """*Ejecuta la transformación utilizando la clase `DataScaleImputer` y asigna el resultado a `df_insurance`*"""
 
 # Write you code here
+scaler = DataScaleImputer(columns=["Idade", "Renda"])
+df_insurance = scaler.fit_transform(df_insurance)
+
 
 """*Imprime las estadísticas básicas del conjunto de datos df_insurance, ubásicas utilizando el método `describe()`*"""
 
 # Write you code here
+print(df_insurance[["Idade", "Renda"]].describe())
 
 """## Pregunta
 *¿Cuáles otras técnicas conoces que pueden ser utilizadas para escalar o normalizar los datos? Menciona dos.*
+
+Otras técnicas para escalar o normalizar los datos son el Min-Max Scaling, que reescala los valores a un rango fijo (por ejemplo, entre 0 y 1),
+y el Robust Scaling, que utiliza la mediana y el rango intercuartílico y es menos sensible a valores atípicos.
 
 ## Unificación de conjuntos de datos
 
