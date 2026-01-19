@@ -1750,14 +1750,29 @@ Ahora vamos a desarrollar validaciones para ver cuáles características son má
 
 def plot_correlations(df_temp):
     # Write your code here
-    pass
+    plt.figure(figsize=(16,12))
 
+    corr_matrix = df_temp.corr()
+
+    sns.heatmap(
+        corr_matrix,
+        cmap="coolwarm",
+        center=0,
+        linewidths=0.5
+    )
+
+    plt.title("Correlation Matrix of Features")
+    plt.show()
 
 # Write your code here, plot using plot_correlations
 plot_correlations(data_frame_tipo_financiamiento)
 
 """## Pregunta
 * *¿Puedes identificar cuáles columnas son más relevantes y por qué?*
+
+Gracias a la matriz de correlación se observa que las variables más relevantes son aquellas relacionadas directamente
+con productos financieros, como los distinto tipos de préstamos, seguros e inversiones, ya que muestran mayores niveles
+de correlación entre sí y con la variable objetivo "tipo_financiamiento"
 
 La siguiente función, `get_most_important_features`, nos permite extraer aquellas n columnas más relevantes a partir de la matriz de correlación.
 """
