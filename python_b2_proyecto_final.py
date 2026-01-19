@@ -1809,6 +1809,16 @@ def get_most_important_features(correlation_matrix, target_column, n=5):
 """
 
 # Write your code here
+correlation_matrix = data_frame_tipo_financiamiento.corr()
+
+top_features = get_most_important_features(
+    correlation_matrix=correlation_matrix,
+    target_column="tipo_financiamiento",
+    n=6
+)
+
+print("Top 6 most important features related to tipo_financiamiento")
+print(top_features)
 
 """# Análisis de Componentes Principales(PCA)
 
