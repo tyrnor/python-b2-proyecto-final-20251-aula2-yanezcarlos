@@ -108,7 +108,7 @@ from sklearn.ensemble import (
     VotingClassifier,
     ExtraTreesClassifier,
     AdaBoostClassifier,
-    GradientBoostingClassifier
+    GradientBoostingClassifier,
 )
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.linear_model import RidgeClassifier, LogisticRegression
@@ -117,32 +117,17 @@ from sklearn.model_selection import (
     learning_curve,
     ShuffleSplit,
     cross_val_score,
-    KFold
+    KFold,
 )
-from sklearn.metrics import (
-    classification_report,
-    confusion_matrix,
-    accuracy_score
-)
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from functools import reduce
-from sklearn.preprocessing import (
-    LabelEncoder,
-    StandardScaler
-)
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.datasets import load_iris
 from sklearn.neighbors import KNeighborsClassifier
 from imblearn.pipeline import Pipeline
-from imblearn.over_sampling import (
-    SMOTE,
-    RandomOverSampler,
-    SMOTENC,
-    ADASYN
-)
-from imblearn.under_sampling import (
-    RandomUnderSampler,
-    NearMiss
-)
+from imblearn.over_sampling import SMOTE, RandomOverSampler, SMOTENC, ADASYN
+from imblearn.under_sampling import RandomUnderSampler, NearMiss
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler
@@ -159,8 +144,8 @@ from sklearn.model_selection import StratifiedShuffleSplit
 
 """## Configuración de visualización de conjuntos de datos"""
 
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_colwidth', None)
+pd.set_option("display.max_columns", None)
+pd.set_option("display.max_colwidth", None)
 
 """### Descarga las fuentes de datos
 
@@ -189,6 +174,7 @@ X_principal = None
 A continuación se presentan algunas funciones para gráficar que pueden ser útiles.
 """
 
+
 def plot_boxplot_violinplot(x, y, data_frame):
     """
     Plot both boxplot and violinplot for comparison.
@@ -209,7 +195,7 @@ def plot_boxplot_violinplot(x, y, data_frame):
 
     # Rotate x-axis labels
     for ax in axes:
-        ax.tick_params(axis='x', rotation=70)
+        ax.tick_params(axis="x", rotation=70)
 
     # Plot violinplot
     sns.violinplot(data=data_frame, x=x, y=y, ax=axes[0])
@@ -222,6 +208,7 @@ def plot_boxplot_violinplot(x, y, data_frame):
 
     # Show plots
     plt.show()
+
 
 def plot_count_plots(df_base, columnas):
     """
@@ -252,30 +239,33 @@ def plot_count_plots(df_base, columnas):
     for columna, ax in zip(columnas, axes):
         # Plot count plot
         sns.countplot(x=columna, data=df_base, ax=ax)
-        ax.set_title(f'Count Plot for {columna}')  # Add title
-        ax.tick_params(axis='x', rotation=90)  # Rotate x-axis labels
+        ax.set_title(f"Count Plot for {columna}")  # Add title
+        ax.tick_params(axis="x", rotation=90)  # Rotate x-axis labels
 
     # Adjust layout
     plt.tight_layout()
 
-def plot_confusion_matrix(cm, mapping, title='Confusion matrix', cmap=None, normalize=True):
+
+def plot_confusion_matrix(
+    cm, mapping, title="Confusion matrix", cmap=None, normalize=True
+):
     # Calculate accuracy and misclassification rate
     accuracy = np.trace(cm) / float(np.sum(cm))
     misclass = 1 - accuracy
 
     # Set default color map if not provided
     if cmap is None:
-        cmap = plt.get_cmap('Blues')
+        cmap = plt.get_cmap("Blues")
 
     # Create a new figure
     plt.figure(figsize=(8, 6))
 
     # Display confusion matrix as image
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.imshow(cm, interpolation="nearest", cmap=cmap)
     plt.title(title)
     plt.colorbar()
-    labes = [mapping[key] for key in mapping.keys() ]
-    print("mapping",mapping)
+    labes = [mapping[key] for key in mapping.keys()]
+    print("mapping", mapping)
     # Display target names on ticks if provided
     if labes is not None:
         tick_marks = np.arange(len(labes))
@@ -284,7 +274,7 @@ def plot_confusion_matrix(cm, mapping, title='Confusion matrix', cmap=None, norm
 
     # Normalize confusion matrix if required
     if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
 
     # Set threshold for text color based on normalization
     thresh = cm.max() / 1.5 if normalize else cm.max() / 2
@@ -292,23 +282,36 @@ def plot_confusion_matrix(cm, mapping, title='Confusion matrix', cmap=None, norm
     # Add text annotations to cells
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         if normalize:
-            plt.text(j, i, "{:0.2f}".format(cm[i, j]),
-                     horizontalalignment="center",
-                     color="white" if cm[i, j] > thresh else "black")
+            plt.text(
+                j,
+                i,
+                "{:0.2f}".format(cm[i, j]),
+                horizontalalignment="center",
+                color="white" if cm[i, j] > thresh else "black",
+            )
         else:
-            plt.text(j, i, "{:,}".format(cm[i, j]),
-                     horizontalalignment="center",
-                     color="white" if cm[i, j] > thresh else "black")
+            plt.text(
+                j,
+                i,
+                "{:,}".format(cm[i, j]),
+                horizontalalignment="center",
+                color="white" if cm[i, j] > thresh else "black",
+            )
 
     # Set labels for axes
     plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
+    plt.ylabel("True label")
+    plt.xlabel(
+        "Predicted label\naccuracy={:0.4f}; misclass={:0.4f}".format(accuracy, misclass)
+    )
 
     # Show the plot
     plt.show()
 
-def plot_accuracy_scores(estimator, train_x, train_y, test_x, test_y, nparts=5, jobs=None):
+
+def plot_accuracy_scores(
+    estimator, train_x, train_y, test_x, test_y, nparts=5, jobs=None
+):
     # Initialize KFold with specified number of splits, shuffling, and random state
     kfold = KFold(n_splits=nparts, shuffle=True, random_state=123)
 
@@ -321,22 +324,26 @@ def plot_accuracy_scores(estimator, train_x, train_y, test_x, test_y, nparts=5, 
     axes.set_ylabel("Accuracy")
 
     # Compute accuracy scores for training data using cross-validation
-    train_scores = cross_val_score(estimator, train_x, train_y, cv=kfold, n_jobs=jobs, scoring="accuracy")
+    train_scores = cross_val_score(
+        estimator, train_x, train_y, cv=kfold, n_jobs=jobs, scoring="accuracy"
+    )
 
     # Compute accuracy scores for test data using cross-validation
-    test_scores = cross_val_score(estimator, test_x, test_y, cv=kfold, n_jobs=jobs, scoring="accuracy")
+    test_scores = cross_val_score(
+        estimator, test_x, test_y, cv=kfold, n_jobs=jobs, scoring="accuracy"
+    )
 
     # Generate sequence of fold numbers
-    train_sizes = range(1, nparts+1, 1)
+    train_sizes = range(1, nparts + 1, 1)
 
     # Add grid lines to the plot
     axes.grid()
 
     # Plot accuracy scores for training data
-    axes.plot(train_sizes, train_scores, 'o-', color="r", label="Training Data")
+    axes.plot(train_sizes, train_scores, "o-", color="r", label="Training Data")
 
     # Plot accuracy scores for cross-validation data
-    axes.plot(train_sizes, test_scores, 'o-', color="g", label="Cross-Validation")
+    axes.plot(train_sizes, test_scores, "o-", color="g", label="Cross-Validation")
 
     # Add legend to the plot
     axes.legend(loc="best")
@@ -344,17 +351,21 @@ def plot_accuracy_scores(estimator, train_x, train_y, test_x, test_y, nparts=5, 
     # Return the accuracy scores for training data
     return train_scores
 
+
 def startified_train_test_split(X, Y, n_splits=1, test_size=0.2, random_state=42):
-  # Assuming X and y are your feature matrix and target variable respectively
+    # Assuming X and y are your feature matrix and target variable respectively
 
-  # Initialize StratifiedShuffleSplit
-  stratified_splitter = StratifiedShuffleSplit(n_splits=n_splits, test_size=test_size, random_state=random_state)
+    # Initialize StratifiedShuffleSplit
+    stratified_splitter = StratifiedShuffleSplit(
+        n_splits=n_splits, test_size=test_size, random_state=random_state
+    )
 
-  # Split the data while maintaining the class distribution
-  for train_index, test_index in stratified_splitter.split(X, y):
-      X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-      y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-  return X_train, X_test, y_train, y_test
+    # Split the data while maintaining the class distribution
+    for train_index, test_index in stratified_splitter.split(X, y):
+        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    return X_train, X_test, y_train, y_test
+
 
 def plot_pca_cumulative_variance(pca):
     """
@@ -374,13 +385,25 @@ def plot_pca_cumulative_variance(pca):
     cum_sum_eigenvalues = np.cumsum(exp_var_pca)
 
     # Create the visualization plot
-    plt.bar(range(1,len(exp_var_pca)+1), exp_var_pca, alpha=0.5, align='center', label='Individual explained variance')
-    plt.step(range(1,len(cum_sum_eigenvalues)+1), cum_sum_eigenvalues, where='mid',label='Cumulative explained variance')
-    plt.ylabel('Explained variance ratio')
-    plt.xlabel('Principal component index')
-    plt.legend(loc='best')
+    plt.bar(
+        range(1, len(exp_var_pca) + 1),
+        exp_var_pca,
+        alpha=0.5,
+        align="center",
+        label="Individual explained variance",
+    )
+    plt.step(
+        range(1, len(cum_sum_eigenvalues) + 1),
+        cum_sum_eigenvalues,
+        where="mid",
+        label="Cumulative explained variance",
+    )
+    plt.ylabel("Explained variance ratio")
+    plt.xlabel("Principal component index")
+    plt.legend(loc="best")
     plt.tight_layout()
     plt.show()
+
 
 def get_pca_components(pca, columns):
     # Number of components
@@ -393,13 +416,16 @@ def get_pca_components(pca, columns):
     initial_feature_names = columns
 
     # Get the names
-    most_important_names = [initial_feature_names[most_important[i]] for i in range(n_pcs)]
+    most_important_names = [
+        initial_feature_names[most_important[i]] for i in range(n_pcs)
+    ]
 
     # Using dictionary comprehension to create a dictionary
-    dic = {'PC{}'.format(i+1): most_important_names[i] for i in range(n_pcs)}
+    dic = {"PC{}".format(i + 1): most_important_names[i] for i in range(n_pcs)}
 
     # Return a DataFrame sorted by keys
     return pd.DataFrame(sorted(dic.items()))
+
 
 def plot_elbow_curve_pca(X_principal):
     """
@@ -425,11 +451,12 @@ def plot_elbow_curve_pca(X_principal):
         inertias.append(model.inertia_)
 
     # Plot ks vs inertias
-    plt.plot(ks, inertias, '-o')
-    plt.xlabel('Number of clusters, k')
-    plt.ylabel('Inertia')
+    plt.plot(ks, inertias, "-o")
+    plt.xlabel("Number of clusters, k")
+    plt.ylabel("Inertia")
     plt.xticks(ks)
     plt.show()
+
 
 """# **Pregunta 1**
 
@@ -529,21 +556,21 @@ La preparación de datos es un paso crucial en el proceso de análisis de datos.
 Comencemos importando los diferentes conjuntos de datos como dataframes utilizando la librería de pandas. Luego, procederemos a presentar los primeros 10 registros.
 """
 
-#Write your code here
+# Write your code here
 df_retailbank = pd.read_csv("data/RetailBankEFG.csv")
 print("RetailBankEFG - First 10 records")
 print(df_retailbank.head(10))
 
 """*Realiza la misma acción para InvestmentBankCDE.csv.*"""
 
-#Write your code here
+# Write your code here
 df_investment = pd.read_csv("data/InvestmentBankCDE.csv")
 print("InvestmentBankCDE - First 10 records")
 print(df_investment.head(10))
 
 """*Realiza la misma acción para InvestmentBankCDE.csv.*"""
 
-#Write your code here
+# Write your code here
 df_insurance = pd.read_csv("data/InsuranceCompanyABC.csv")
 print("InsuranceCompanyABC - First 10 records")
 print(df_insurance.head(10))
@@ -553,13 +580,11 @@ print(df_insurance.head(10))
 """
 
 common_attributes = (
-    set(df_retailbank.columns) &
-    set(df_investment.columns) &
-    set(df_insurance.columns)
+    set(df_retailbank.columns) & set(df_investment.columns) & set(df_insurance.columns)
 )
 print("Common attributes between datasets:", common_attributes)
 
-# El atributo común entre los diferentes datasets es "ID" e identifica de manera única a cada cliente. 
+# El atributo común entre los diferentes datasets es "ID" e identifica de manera única a cada cliente.
 # Además, este puede usarse como clave para fusionar los datasets y consolidar la información de cada cliente proveniente de las distintas instituciones financieras.
 
 
@@ -601,31 +626,45 @@ print("InsuranceCompanyABC - Number of records:", df_insurance.shape[0])
 Vamos a identificar los valores nulos o faltantes en los conjuntos de datos. Para esto, crearás una función llamada `get_nan_values`. Esta función tomará como parámetro un dataframe y devolverá el número de valores nulos por fila y por columna.
 """
 
+
 def get_nan_values(data_frame):
-  # Count NaN values in each column
-  nan_count_per_column = data_frame.isna().sum()
-  # Total number of records with NaN values
-  total_nan_records = data_frame.isna().any(axis=1).sum()
-  # pass
-  return {"Count NaN values in each column":nan_count_per_column,"Total number of records with NaN values":total_nan_records}
+    # Count NaN values in each column
+    nan_count_per_column = data_frame.isna().sum()
+    # Total number of records with NaN values
+    total_nan_records = data_frame.isna().any(axis=1).sum()
+    # pass
+    return {
+        "Count NaN values in each column": nan_count_per_column,
+        "Total number of records with NaN values": total_nan_records,
+    }
+
 
 """*Imprime los valores faltantes por fila y columna*"""
 
-#Write your code here for df_retailbank
+# Write your code here for df_retailbank
 print("NaN values in RetailBankEFG")
 nan_retail = get_nan_values(df_retailbank)
 print(nan_retail["Count NaN values in each column"])
-print("Total number of records with NaN values:", nan_retail["Total number of records with NaN values"])
-#Write your code here for df_investment
+print(
+    "Total number of records with NaN values:",
+    nan_retail["Total number of records with NaN values"],
+)
+# Write your code here for df_investment
 print("NaN values in InvestmentBankCDE")
 nan_investment = get_nan_values(df_investment)
 print(nan_investment["Count NaN values in each column"])
-print("Total number of records with NaN values:", nan_investment["Total number of records with NaN values"])
-#Write your code here for df_insurance
+print(
+    "Total number of records with NaN values:",
+    nan_investment["Total number of records with NaN values"],
+)
+# Write your code here for df_insurance
 print("NaN values in InsuranceCompanyABC")
 nan_insurance = get_nan_values(df_insurance)
 print(nan_insurance["Count NaN values in each column"])
-print("Total number of records with NaN values:", nan_insurance["Total number of records with NaN values"])
+print(
+    "Total number of records with NaN values:",
+    nan_insurance["Total number of records with NaN values"],
+)
 
 """## Pregunta
 *¿Existen valores faltantes en los datos?*
@@ -636,6 +675,7 @@ de registros con valores NaN también es cero en cada uno de ellos.
 ## Duplicados
 Vamos a detectar si existen filas duplicadas que pueden distorsionar los análisis. Para ello, vamos a validar si hay registros duplicados en el conjunto de datos utilizando la función `check_duplicates`. En caso afirmativo, necesitaremos pasar como parámetros el dataframe a validar y la columna que se utiliza como identificador.
 """
+
 
 def check_duplicates(data_frame, column):
     """
@@ -656,12 +696,19 @@ def check_duplicates(data_frame, column):
 
     return num_duplicates
 
+
 """*Imprime la cantidad de filas duplicadas para df_retailbank, df_investment y df_insurance*"""
 
-#Write your code here
-print("Duplicate rows in RetailBankEFG (by ID):", check_duplicates(df_retailbank, 'ID'))
-print("Duplicate rows in InvestmentBankCDE (by ID):", check_duplicates(df_investment, 'ID'))
-print("Duplicate rows in InsuranceCompanyABC (by ID):", check_duplicates(df_insurance, 'ID'))
+# Write your code here
+print("Duplicate rows in RetailBankEFG (by ID):", check_duplicates(df_retailbank, "ID"))
+print(
+    "Duplicate rows in InvestmentBankCDE (by ID):",
+    check_duplicates(df_investment, "ID"),
+)
+print(
+    "Duplicate rows in InsuranceCompanyABC (by ID):",
+    check_duplicates(df_insurance, "ID"),
+)
 """## Pregunta
 ¿Existen datos duplicados?
 
@@ -679,19 +726,20 @@ En esta sección, se propondrán varios métodos para identificar inconsistencia
 *Imprime las estadísticas básicas*
 """
 
-#Write your code here for df_retailbank
+# Write your code here for df_retailbank
 print("Basic statistics for RetailBankEFG:")
 print(df_retailbank.describe(include="all").T)
-#Write your code here for df_investment
+# Write your code here for df_investment
 print("Basic statistics for InvestmentBankCDE:")
 print(df_investment.describe(include="all").T)
-#Write your code here for df_insurance
+# Write your code here for df_insurance
 print("Basic statistics for InsuranceCompanyABC:")
 print(df_insurance.describe(include="all").T)
 
 """### Identificar Valores Únicos:
 Ahora, para todas las variables no numéricas, debemos identificar cuántos tipos de datos están registrados en cada columna. Implementaremos la función `get_value_counts_non_numeric_columns`, la cual obtiene los conteos de valores de las columnas no numéricas en un DataFrame y devuelve un diccionario donde las claves son los nombres de las columnas no numéricas y los valores son sus respectivos conteos de valores.
 """
+
 
 def find_non_numeric_columns(df):
     """
@@ -703,9 +751,11 @@ def find_non_numeric_columns(df):
     Returns:
     list: A list of non-numeric column names.
     """
-    return df.select_dtypes(exclude=['number']).columns.tolist()
+    return df.select_dtypes(exclude=["number"]).columns.tolist()
+
 
 """*Implementa la función `get_value_counts_non_numeric_columns`, la cual debe hacer uso de la función `find_non_numeric_columns`. Esta función devuelve un diccionario donde las claves son los nombres de las columnas no numéricas y los valores son sus respectivos conteos de valores.*"""
+
 
 def get_value_counts_non_numeric_columns(df):
     """
@@ -718,32 +768,33 @@ def get_value_counts_non_numeric_columns(df):
     dict: A dictionary where keys are non-numeric column names and values are their respective value counts.
     """
     # write your code here
-    #Get non-numeric columns
+    # Get non-numeric columns
     non_numeric_columns = find_non_numeric_columns(df)
     value_counts_dict = {}
 
     for col in non_numeric_columns:
         value_counts_dict[col] = df[col].value_counts()
-    
+
     return value_counts_dict
+
 
 """*Imprime los conteos de las columnas no numéricas.*"""
 
-#Write your code here for df_retailbank
+# Write your code here for df_retailbank
 print("Value counts for non-numeric columns in RetailBankEFG:")
 retail_counts = get_value_counts_non_numeric_columns(df_retailbank)
 for col, counts in retail_counts.items():
     print(f"Column: {col}")
     print(counts)
 
-#Write your code here for df_investment
+# Write your code here for df_investment
 print("Value counts for non-numeric columns in InvestmentBankCDE:")
 investment_counts = get_value_counts_non_numeric_columns(df_investment)
 for col, counts in investment_counts.items():
     print(f"Column: {col}")
     print(counts)
 
-#Write your code here for df_insurance
+# Write your code here for df_insurance
 print("Value counts for non-numeric columns in InsuranceCompanyABC:")
 insurance_counts = get_value_counts_non_numeric_columns(df_insurance)
 for col, counts in insurance_counts.items():
@@ -754,13 +805,13 @@ for col, counts in insurance_counts.items():
 *Utiliza el atributo `dtypes` para verificar los tipos de datos de cada columna.*
 """
 
-#Write your code here for df_retailbank
+# Write your code here for df_retailbank
 print("Data types for RetailBankEFG:")
 print(df_retailbank.dtypes)
-#Write your code here for df_investment
+# Write your code here for df_investment
 print("Data types for InvestmentBankCDE:")
 print(df_investment.dtypes)
-#Write your code here for df_insurance
+# Write your code here for df_insurance
 print("Data types for InsuranceCompanyABC:")
 print(df_insurance.dtypes)
 
@@ -785,13 +836,17 @@ Esta es una sección libre en la que podrás crear diferentes visualizaciones de
 - **Box plot para cada columna numérica (excluyendo la columna ID):** Utiliza box plots para visualizar la distribución de los datos, los valores atípicos y la mediana en cada columna numérica.
 """
 
-#Write your code here, add your custom plots for df_retailbank
-df_retailbank["Financiamento Casa"].value_counts().plot(kind="bar", title="Financiamiento Casa")
+# Write your code here, add your custom plots for df_retailbank
+df_retailbank["Financiamento Casa"].value_counts().plot(
+    kind="bar", title="Financiamiento Casa"
+)
 plt.show()
-#Write your code here, add your custom plots for df_investment
-df_investment["Investimento Poupanca"].value_counts().plot(kind="bar", title="Investimento Poupanca")
+# Write your code here, add your custom plots for df_investment
+df_investment["Investimento Poupanca"].value_counts().plot(
+    kind="bar", title="Investimento Poupanca"
+)
 plt.show()
-#Write your code here, add your custom plots for df_insurance
+# Write your code here, add your custom plots for df_insurance
 df_insurance["Regiao"].value_counts().plot(kind="bar", title="Regiao")
 plt.show()
 
@@ -823,11 +878,11 @@ Para realizar el análisis de patrones anómalos, utilizarás la función `plot_
 *Graficar la región(Regiao) en función de la edad(Idade), del conjunto de datos `df_insurance`.*
 """
 
-#Write your code here for df_insurance
+# Write your code here for df_insurance
 plot_boxplot_violinplot(x="Regiao", y="Idade", data_frame=df_insurance)
 """ *Graficar la región(Regiao) en función de la edad(Renda), del conjunto de datos `df_insurance`.*"""
 
-#Write your code here for df_insurance
+# Write your code here for df_insurance
 plot_boxplot_violinplot(x="Regiao", y="Renda", data_frame=df_insurance)
 """## Preguntas
 * *¿Cuál es la distribución de datos sugerida?*
@@ -883,7 +938,7 @@ completos.
 *Vamos a eliminar los datos duplicados en todos los conjuntos de datos utilizando la función `drop_duplicates`, junto con el parámetro `inplace`.*
 """
 
-#Write your code here
+# Write your code here
 df_retailbank.drop_duplicates(subset="ID", inplace=True)
 df_investment.drop_duplicates(subset="ID", inplace=True)
 df_insurance.drop_duplicates(subset="ID", inplace=True)
@@ -907,6 +962,7 @@ modelos de machine learning.
 Las operaciones de ingeniería de características a menudo dependen de las relaciones entre las características, las cuales pueden distorsionarse al normalizar los datos. Luego, crear nuevas características como identificar los rangos de edades (Idade) y de ingresos (Renda) tiene más sentido en este punto. A continuación, se presenta un ejemplo al crear una nueva clase `CreateNewRangesColumns`, la cual implementa las clases y librerías necesarias para crear estas nuevas características.
 """
 
+
 class CreateNewRangesColumns(BaseEstimator, TransformerMixin):
 
     def fit(self, X, y=None):
@@ -915,10 +971,10 @@ class CreateNewRangesColumns(BaseEstimator, TransformerMixin):
 
     def createAgeRange(self, base_df):
         # Extract the age series from the base DataFrame
-        age_series_temp = base_df['Idade']
+        age_series_temp = base_df["Idade"]
 
         # Define conditions to create age ranges
-        conditions  = [
+        conditions = [
             (age_series_temp >= 0) & (age_series_temp < 25),
             (age_series_temp >= 25) & (age_series_temp < 30),
             (age_series_temp >= 30) & (age_series_temp < 35),
@@ -927,25 +983,33 @@ class CreateNewRangesColumns(BaseEstimator, TransformerMixin):
             (age_series_temp >= 45) & (age_series_temp < 50),
             (age_series_temp >= 50) & (age_series_temp < 55),
             (age_series_temp >= 55) & (age_series_temp < 60),
-            (age_series_temp >= 60)
+            (age_series_temp >= 60),
         ]
 
         # Define choices for age ranges
         choices = [
-            'R1-0-24', 'R2-25-29', 'R3-30-34', 'R4-35-39', 'R5-40-44', 'R6-45-49', 'R7-50-54', 'R8-55-59', 'R9-60'
+            "R1-0-24",
+            "R2-25-29",
+            "R3-30-34",
+            "R4-35-39",
+            "R5-40-44",
+            "R6-45-49",
+            "R7-50-54",
+            "R8-55-59",
+            "R9-60",
         ]
 
         # Create 'AGE_RANGE' column based on defined conditions and choices
-        base_df['AGE_RANGE'] = np.select(conditions, choices, default="UNKNOWN")
+        base_df["AGE_RANGE"] = np.select(conditions, choices, default="UNKNOWN")
 
         return base_df
 
     def createIncomeRange(self, base_df):
         # Convert income series to numeric format
-        income_series_temp = pd.to_numeric(base_df['Renda'], errors='coerce')
+        income_series_temp = pd.to_numeric(base_df["Renda"], errors="coerce")
 
         # Define conditions to create income ranges
-        conditions  = [
+        conditions = [
             (income_series_temp <= 6000),
             (income_series_temp >= 6000) & (income_series_temp < 6500),
             (income_series_temp >= 6500) & (income_series_temp < 7000),
@@ -953,16 +1017,23 @@ class CreateNewRangesColumns(BaseEstimator, TransformerMixin):
             (income_series_temp >= 7500) & (income_series_temp < 8000),
             (income_series_temp >= 8000) & (income_series_temp < 8500),
             (income_series_temp >= 8500) & (income_series_temp < 9000),
-            (income_series_temp >= 9000)
+            (income_series_temp >= 9000),
         ]
 
         # Define choices for income ranges
         choices = [
-            'R1-6000', 'R2-6000-6500', 'R3-6500-7000', 'R4-7000-7500', 'R5-7500-8000', 'R6-8000-8500', 'R7-8500-9000', 'R8-9000'
+            "R1-6000",
+            "R2-6000-6500",
+            "R3-6500-7000",
+            "R4-7000-7500",
+            "R5-7500-8000",
+            "R6-8000-8500",
+            "R7-8500-9000",
+            "R8-9000",
         ]
 
         # Create 'INCOME_RANGE' column based on defined conditions and choices
-        base_df['INCOME_RANGE'] = np.select(conditions, choices, default="UNKNOWN")
+        base_df["INCOME_RANGE"] = np.select(conditions, choices, default="UNKNOWN")
 
         return base_df
 
@@ -977,6 +1048,7 @@ class CreateNewRangesColumns(BaseEstimator, TransformerMixin):
         df_with_income_range = self.createIncomeRange(df_with_age_range)
 
         return df_with_income_range
+
 
 """A continuación, te presentamos un ejemplo de cómo utilizar esta clase(`CreateNewRangesColumns`). Después, podrás observar que el DataFrame `df_insurance` ahora cuenta con dos nuevas columnas: `AGE_RANGE` e `INCOME_RANGE`, las cuales contienen la información de la identificación de nuevos grupos de datos.
 
@@ -993,7 +1065,7 @@ df_insurance.info()
 
 """
 
-plot_count_plots(df_insurance,["AGE_RANGE","INCOME_RANGE"])
+plot_count_plots(df_insurance, ["AGE_RANGE", "INCOME_RANGE"])
 
 """## Corrección de Inconsistencias
 
@@ -1003,6 +1075,7 @@ A continuación vamos a normalizar los datos numéricos. Luego convertiremos las
 ### Reemplazar Valores Erróneos:
 Como pudiste observar en las gráficas anteriores, existen diferentes valores atípicos que se encuentran fuera del rango. Para abordar esto, vamos a crear una opción que nos permita excluir los datos atípicos de nuestro conjunto de datos `df_insurance`. Para tomar esta decisión, eliminaremos todos los registros que sean menores al primer cuartil y todos aquellos mayores al tercer cuartil. El resultado final se asignará al DataFrame `df_insurance`. Para llevar a cabo este proceso, haremos uso de la clase `OutlierRemover`.
 """
+
 
 # Custom transformer to remove outliers from specified columns
 class OutlierRemover(BaseEstimator, TransformerMixin):
@@ -1036,7 +1109,9 @@ class OutlierRemover(BaseEstimator, TransformerMixin):
         upper_bound = Q3 + self.threshold * IQR
 
         # Create a mask to identify rows with any feature values outside the bounds
-        mask = ((X[self.columns] >= lower_bound) & (X[self.columns] <= upper_bound)).all(axis=1)
+        mask = (
+            (X[self.columns] >= lower_bound) & (X[self.columns] <= upper_bound)
+        ).all(axis=1)
 
         # Keep only the rows that are within the bounds
         X_filtered = X[mask].reset_index(drop=True)
@@ -1046,9 +1121,10 @@ class OutlierRemover(BaseEstimator, TransformerMixin):
 
         return X.dropna()
 
+
 """*Ejecuta la transformación utilizando la clase `OutlierRemover` y asigna el resultado a `df_insurance`*"""
 
-#Write your code here
+# Write your code here
 
 outlier_remover = OutlierRemover(threshold=1.5, columns=["Idade", "Renda"])
 
@@ -1058,7 +1134,7 @@ df_insurance = outlier_remover.fit_transform(df_insurance)
 Después de eliminar los datos atípicos, ¿cuántos registros tiene ahora el DataFrame `df_insurance`?
 """
 
-#Write your code here
+# Write your code here
 
 print("Number of records after removing outliers:", df_insurance.shape[0])
 
@@ -1082,13 +1158,13 @@ En las siguientes gráficas, puedes observar las diferencias con respecto a las 
 *Graficar la región(Regiao) en función de la edad(Idade), del conjunto de datos `df_insurance`, utilizando la función `plot_boxplot_violinplot`.*
 """
 
-#Write your code here
+# Write your code here
 
 plot_boxplot_violinplot(x="Regiao", y="Idade", data_frame=df_insurance)
 
 """ *Graficar la región(Regiao) en función de los ingresos(Renda), del conjunto de datos `df_insurance`, utilizando la función `plot_boxplot_violinplot`.*"""
 
-#Write your code here, add you plot using ´plot_boxplot_violinplot´
+# Write your code here, add you plot using ´plot_boxplot_violinplot´
 
 plot_boxplot_violinplot(x="Regiao", y="Renda", data_frame=df_insurance)
 
@@ -1110,6 +1186,7 @@ Para la clase DataScaleImputer, debes investigar un poco cómo realizar la conve
 Otra opción es crear una función que permita estandarizar las características eliminando la media y escalando a varianza unitaria. Esto se calcula como: z = (x - u) / s
 """
 
+
 # Custom class to impute and scale data
 class DataScaleImputer(BaseEstimator, TransformerMixin):
     def __init__(self, columns):
@@ -1122,15 +1199,14 @@ class DataScaleImputer(BaseEstimator, TransformerMixin):
         return self  # Return the transformer
 
     def transform(self, X):
-        data = X.copy()  # Make a copy of the input DataFrame to avoid modifying the original
+        data = (
+            X.copy()
+        )  # Make a copy of the input DataFrame to avoid modifying the original
 
         # Create a ColumnTransformer that will apply StandardScaler only to the specified columns
         # Write you code here, change None by custom transformer
         transformer = ColumnTransformer(
-            transformers=[
-                ("scaler", self.scaler, self.columns)
-            ],
-            remainder="drop"
+            transformers=[("scaler", self.scaler, self.columns)], remainder="drop"
         )
 
         # Apply the transformer to the data
@@ -1143,6 +1219,7 @@ class DataScaleImputer(BaseEstimator, TransformerMixin):
         data[self.columns] = X_imputed_df[self.columns]
 
         return data.dropna()  # Return the transformed DataFrame
+
 
 """*Ejecuta la transformación utilizando la clase `DataScaleImputer` y asigna el resultado a `df_insurance`*"""
 
@@ -1171,7 +1248,9 @@ Vamos a unificar diferentes conjuntos de datos (`df_insurance`, `df_retailbank` 
 
 # Write you code here
 
-data_frame_merged = df_insurance.merge(df_retailbank, on="ID", how="inner").merge(df_investment, on="ID", how="inner")
+data_frame_merged = df_insurance.merge(df_retailbank, on="ID", how="inner").merge(
+    df_investment, on="ID", how="inner"
+)
 
 print(data_frame_merged.head(10))
 
@@ -1198,7 +1277,9 @@ print(data_frame_merged.isna().sum())
 Como has notado, se presentan ciertos inconvenientes en los nombres de las columnas. A continuación, intentaremos resolver estos errores identificando y corrigiendo espacios adicionales u otros problemas.
 """
 
-data_frame_merged = data_frame_merged.rename(columns = lambda x:re.sub('[^A-Za-z0-9_]+', '', x))
+data_frame_merged = data_frame_merged.rename(
+    columns=lambda x: re.sub("[^A-Za-z0-9_]+", "", x)
+)
 data_frame_merged.info()
 
 """## Finalización tramiento de datos
@@ -1216,6 +1297,7 @@ Como último paso, es necesario ejecutar el siguiente tratamiento a los datos co
 4. **Conversión de valores binarios:** Se convertirán todas las columnas con valores 'F' o 'T' a tipos de datos numéricos 0 y 1, respectivamente.
 """
 
+
 class OneHotDecoderImputer(BaseEstimator, TransformerMixin):
     def __init__(self, columns, label_column_name):
         """
@@ -1225,7 +1307,9 @@ class OneHotDecoderImputer(BaseEstimator, TransformerMixin):
         - columns: list of str, names of columns to be converted from one-hot encoding
         - label_column_name: str, name of the new label column
         """
-        self.columns = columns  # List of column names to be converted from one-hot encoding
+        self.columns = (
+            columns  # List of column names to be converted from one-hot encoding
+        )
         self.label_column_name = label_column_name
         self.label_encoders = {}  # Dictionary to store label encoders for each column
 
@@ -1283,9 +1367,13 @@ class OneHotDecoderImputer(BaseEstimator, TransformerMixin):
             X_transformed[col] = self.label_encoders[col].transform(X[col])
 
         # Create the label column by applying the method to each row
-        X_transformed[self.label_column_name] = X_transformed[self.columns].apply(lambda row: self.get_financing_type_name_from_row(row), axis=1)
+        X_transformed[self.label_column_name] = X_transformed[self.columns].apply(
+            lambda row: self.get_financing_type_name_from_row(row), axis=1
+        )
 
         return X_transformed.drop(columns=self.columns)
+
+
 class BooleanToNumeric(BaseEstimator, TransformerMixin):
     def __init__(self):
         """
@@ -1317,6 +1405,7 @@ class BooleanToNumeric(BaseEstimator, TransformerMixin):
         """
         X_transformed = X.replace({"T": 1, "F": 0})
         return X_transformed
+
 
 class MultiColumnLabelEncoder(BaseEstimator, TransformerMixin):
     def __init__(self, columns=None):
@@ -1387,6 +1476,7 @@ class MultiColumnLabelEncoder(BaseEstimator, TransformerMixin):
             X_inverse[col] = self.label_encoders[col].inverse_transform(X[col])
         return X_inverse
 
+
 class DropColumns(BaseEstimator, TransformerMixin):
     def __init__(self, columns=None):
         """
@@ -1419,21 +1509,37 @@ class DropColumns(BaseEstimator, TransformerMixin):
         Returns:
         - X_transformed: pd.DataFrame, the transformed DataFrame
         """
-        X_transformed = X.drop(columns=self.columns, errors='ignore')
+        X_transformed = X.drop(columns=self.columns, errors="ignore")
         return X_transformed
+
 
 """Definimos el pipeline para ajustar los datos al formato requerido para resolver el ejercicio."""
 
-pipeline_data_preparation = Pipeline([
-    ("one_hote_to_label" ,OneHotDecoderImputer(columns=["FinanciamentoCasa","FinanciamentoCarro"], label_column_name = "tipo_financiamiento" )),
-    ("label_encode", MultiColumnLabelEncoder(columns=["AGE_RANGE","INCOME_RANGE","tipo_financiamiento","Regiao"])),
-    ('drop_columns', DropColumns(columns=["ID"])),
-    ('boolean_numeric', BooleanToNumeric())
-])
+pipeline_data_preparation = Pipeline(
+    [
+        (
+            "one_hote_to_label",
+            OneHotDecoderImputer(
+                columns=["FinanciamentoCasa", "FinanciamentoCarro"],
+                label_column_name="tipo_financiamiento",
+            ),
+        ),
+        (
+            "label_encode",
+            MultiColumnLabelEncoder(
+                columns=["AGE_RANGE", "INCOME_RANGE", "tipo_financiamiento", "Regiao"]
+            ),
+        ),
+        ("drop_columns", DropColumns(columns=["ID"])),
+        ("boolean_numeric", BooleanToNumeric()),
+    ]
+)
 
 """*Ejecuta el pipeline para ajustar los datos y asignarlos a la variable `data_frame_tipo_financiamiento`.*"""
 
-data_frame_tipo_financiamiento = pipeline_data_preparation.fit_transform(data_frame_merged)
+data_frame_tipo_financiamiento = pipeline_data_preparation.fit_transform(
+    data_frame_merged
+)
 data_frame_tipo_financiamiento.head(10)
 
 """Obtenemos las etiquetas por tipo de financiamiento y asignamos a la varabile `le_tipo_financiamiento_mapping`."""
@@ -1446,6 +1552,7 @@ tipo_financiamiento_mapping
 """*Imprime las estadísticas básicas del conjunto de datos `data_frame_tipo_financiamiento`*"""
 
 # Write you code here
+print(data_frame_tipo_financiamiento.describe())
 
 """## Cierre tratamiento de datos
 Es crucial comprender que el tratamiento de datos no es solo una etapa preliminar, sino un proceso continuo que puede influir significativamente en el rendimiento y la precisión de los modelos de Machine Learning. Al abordar de manera efectiva problemas como valores faltantes, valores atípicos y errores de formato, estamos creando un conjunto de datos robusto y confiable, lo que a su vez potencia la capacidad predictiva de nuestros modelos.
@@ -1456,6 +1563,8 @@ Hasta este punto, hemos completado varios pasos relacionados con el tratamiento 
 """
 
 # Write you code here
+
+data_frame_tipo_financiamiento.to_csv("data_frame_tipo_financiamiento.csv", index=False)
 
 """# **Pregunta 3 - Creación de modelos de Machine Learning**
 
@@ -1518,7 +1627,7 @@ A continuación, desarrolla los siguientes pasos para cada uno de los modelos so
 # Write you code here
 
 # Plot accuracy the model over the time - use plot_accuracy_scores
-#plot_accuracy_scores(rf_model,X_train,y_train,X_test,y_test,nparts=5,jobs=2)
+# plot_accuracy_scores(rf_model,X_train,y_train,X_test,y_test,nparts=5,jobs=2)
 
 # Print classifitacion report using classification_report
 
@@ -1530,21 +1639,35 @@ A continuación, desarrolla los siguientes pasos para cada uno de los modelos so
 # Assuming your data is stored in a DataFrame called 'data_frame_tipo_financiamiento'
 # and the target variable is in a column called 'tipo_financiamiento'
 # Replace 'data_frame_tipo_financiamiento' and 'tipo_financiamiento' with your actual DataFrame and column names
-X = data_frame_tipo_financiamiento.drop(columns=['tipo_financiamiento'])  # Features
-y = data_frame_tipo_financiamiento['tipo_financiamiento']  # Target variable
+X = data_frame_tipo_financiamiento.drop(columns=["tipo_financiamiento"])  # Features
+y = data_frame_tipo_financiamiento["tipo_financiamiento"]  # Target variable
 
 # Split the data into training and testing sets
 # You can adjust the test_size parameter as needed
 # 'random_state' ensures reproducibility of results
-X_train, X_test, y_train, y_test = startified_train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = startified_train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
 # Create the Random LogisticRegression
 # You can customize the parameters based on your requirements
-lr_model = LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
-                   intercept_scaling=1, l1_ratio=None, max_iter=1000,
-                   multi_class='multinomial', n_jobs=None, penalty='l2',
-                   random_state=1355, solver='lbfgs', tol=0.0001, verbose=0,
-                   warm_start=False)
+lr_model = LogisticRegression(
+    C=1.0,
+    class_weight=None,
+    dual=False,
+    fit_intercept=True,
+    intercept_scaling=1,
+    l1_ratio=None,
+    max_iter=1000,
+    multi_class="multinomial",
+    n_jobs=None,
+    penalty="l2",
+    random_state=1355,
+    solver="lbfgs",
+    tol=0.0001,
+    verbose=0,
+    warm_start=False,
+)
 
 # Train the model on the training data
 lr_model.fit(X_train, y_train)
@@ -1559,14 +1682,14 @@ accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
 
 # Plot accuracy the model over the time
-plot_accuracy_scores(lr_model,X_train,y_train,X_test,y_test,nparts=5,jobs=2)
+plot_accuracy_scores(lr_model, X_train, y_train, X_test, y_test, nparts=5, jobs=2)
 
 # Print classifitacion report
-clas_report=classification_report(y_test,y_pred,labels=np.unique(y_pred), digits=6)
+clas_report = classification_report(y_test, y_pred, labels=np.unique(y_pred), digits=6)
 print(clas_report)
 
 # Plot confusion matrix
-plot_confusion_matrix(confusion_matrix(y_test, y_pred),tipo_financiamiento_mapping)
+plot_confusion_matrix(confusion_matrix(y_test, y_pred), tipo_financiamiento_mapping)
 
 """## Preguntas
 * *¿Puedes comparar los modelos y determinar cuál de ellos tiene un mejor rendimiento en términos de exactitud?*
@@ -1579,11 +1702,13 @@ Aquí está la corrección:
 Ahora vamos a desarrollar validaciones para ver cuáles características son más relevantes para el modelo. Para esto, debes a implementar una función llamada  `plot_correlations` que te permita graficar las correlaciones del DataFrame `data_frame_tipo_financiamiento`.
 """
 
+
 def plot_correlations(df_temp):
-    #Write your code here
+    # Write your code here
     pass
 
-#Write your code here, plot using plot_correlations
+
+# Write your code here, plot using plot_correlations
 plot_correlations(data_frame_tipo_financiamiento)
 
 """## Pregunta
@@ -1591,6 +1716,7 @@ plot_correlations(data_frame_tipo_financiamiento)
 
 La siguiente función, `get_most_important_features`, nos permite extraer aquellas n columnas más relevantes a partir de la matriz de correlación.
 """
+
 
 def get_most_important_features(correlation_matrix, target_column, n=5):
     """
@@ -1605,7 +1731,9 @@ def get_most_important_features(correlation_matrix, target_column, n=5):
     - top_features: list, the top N most important feature names
     """
     # Get the absolute correlation values with the target variable
-    correlation_with_target = correlation_matrix[target_column].abs().sort_values(ascending=False)
+    correlation_with_target = (
+        correlation_matrix[target_column].abs().sort_values(ascending=False)
+    )
 
     # Exclude the target variable itself
     correlation_with_target = correlation_with_target.drop(target_column)
@@ -1615,11 +1743,12 @@ def get_most_important_features(correlation_matrix, target_column, n=5):
 
     return top_features
 
+
 """*Utiliza la función `get_most_important_features` e imprime las primeras 6 columnas más relevantes del conjunto de datos que están relacionadas con la variable a predecir.*
 
 """
 
-#Write your code here
+# Write your code here
 
 """# Análisis de Componentes Principales(PCA)
 
@@ -1635,6 +1764,7 @@ def get_most_important_features(correlation_matrix, target_column, n=5):
 * Estas características transformadas se almacenan en un DataFrame llamado `X_principal`, que luego se devuelve junto con el objeto PCA ajustado (`pca_model`) como salida de la función.
 """
 
+
 def create_pca_model(X_train, n_components):
     """
     Create a Principal Component Analysis (PCA) model.
@@ -1648,24 +1778,31 @@ def create_pca_model(X_train, n_components):
     X_principal (DataFrame): The transformed features into principal components.
     """
     # Instantiate PCA
-    #Write your code here
+    # Write your code here
     pca_model = None
 
     # Fit PCA to the training data and transform features
-    #Write your code here
+    # Write your code here
     X_principal = None
 
     # Return pca_model,X_principal
-    return pca_model,X_principal
+    return pca_model, X_principal
+
 
 """Llamamos a la función `create_pca_model`, pasando como argumentos el DataFrame `data_frame_tipo_financiamiento` y `n_components` igual a 10, para determinar las 10 componentes principales del conjunto de datos. Luego, graficamos la varianza acumulada."""
 
-pca_model,X_principal = create_pca_model(data_frame_tipo_financiamiento.drop(columns=['tipo_financiamiento']),n_components=10)
+pca_model, X_principal = create_pca_model(
+    data_frame_tipo_financiamiento.drop(columns=["tipo_financiamiento"]),
+    n_components=10,
+)
 plot_pca_cumulative_variance(pca_model)
 
 """A continuación, obtenemos la lista de los N componentes principales."""
 
-df_pca_components = get_pca_components(pca_model,data_frame_tipo_financiamiento.drop(columns=['tipo_financiamiento']).columns)
+df_pca_components = get_pca_components(
+    pca_model,
+    data_frame_tipo_financiamiento.drop(columns=["tipo_financiamiento"]).columns,
+)
 df_pca_components
 
 """## Pregunta
@@ -1684,25 +1821,45 @@ plot_elbow_curve_pca(X_principal)
 
 n_componenets_pca = 2
 
-X = data_frame_tipo_financiamiento.drop(columns=['tipo_financiamiento'])
-y = data_frame_tipo_financiamiento['tipo_financiamiento']
+X = data_frame_tipo_financiamiento.drop(columns=["tipo_financiamiento"])
+y = data_frame_tipo_financiamiento["tipo_financiamiento"]
 
 # Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
 # Define the steps of the pipeline
 steps = [
-
-    ('pca', PCA(n_components=n_componenets_pca)),   # Apply PCA to reduce dimensionality to 2 components
-    ('clf', GradientBoostingClassifier(ccp_alpha=0.0, criterion='friedman_mse', init=None,
-                           learning_rate=0.1, loss='log_loss', max_depth=3,
-                           max_features=None, max_leaf_nodes=None,
-                           min_impurity_decrease=0.0, min_samples_leaf=1,
-                           min_samples_split=2, min_weight_fraction_leaf=0.0,
-                           n_estimators=100, n_iter_no_change=None,
-                           random_state=447, subsample=1.0, tol=0.0001,
-                           validation_fraction=0.1, verbose=0,
-                           warm_start=False))  # Example classifier
+    (
+        "pca",
+        PCA(n_components=n_componenets_pca),
+    ),  # Apply PCA to reduce dimensionality to 2 components
+    (
+        "clf",
+        GradientBoostingClassifier(
+            ccp_alpha=0.0,
+            criterion="friedman_mse",
+            init=None,
+            learning_rate=0.1,
+            loss="log_loss",
+            max_depth=3,
+            max_features=None,
+            max_leaf_nodes=None,
+            min_impurity_decrease=0.0,
+            min_samples_leaf=1,
+            min_samples_split=2,
+            min_weight_fraction_leaf=0.0,
+            n_estimators=100,
+            n_iter_no_change=None,
+            random_state=447,
+            subsample=1.0,
+            tol=0.0001,
+            validation_fraction=0.1,
+            verbose=0,
+            warm_start=False,
+        ),
+    ),  # Example classifier
 ]
 
 # Create the pipeline
@@ -1715,11 +1872,11 @@ pipeline.fit(X_train, y_train)
 y_pred = pipeline.predict(X_test)
 
 # Print classifitacion report
-clas_report=classification_report(y_test,y_pred,labels=np.unique(y_pred), digits=6)
+clas_report = classification_report(y_test, y_pred, labels=np.unique(y_pred), digits=6)
 print(clas_report)
 
 # Plot confusion matrix
-plot_confusion_matrix(confusion_matrix(y_test, y_pred),tipo_financiamiento_mapping)
+plot_confusion_matrix(confusion_matrix(y_test, y_pred), tipo_financiamiento_mapping)
 
 """Interaction Terms:
 
@@ -1728,8 +1885,8 @@ Create new features that capture the interactions between existing features. For
 ## Implementación del tratamiento de datos desbalanceados
 """
 
-X = data_frame_tipo_financiamiento.drop(columns=['tipo_financiamiento'])
-y = data_frame_tipo_financiamiento['tipo_financiamiento']
+X = data_frame_tipo_financiamiento.drop(columns=["tipo_financiamiento"])
+y = data_frame_tipo_financiamiento["tipo_financiamiento"]
 
 """A continuación, se muestra una gráfica que ilustra la presencia de datos desbalanceados.
 
@@ -1737,7 +1894,9 @@ y = data_frame_tipo_financiamiento['tipo_financiamiento']
 
 """
 
-conteo_tipo_financiamiento_label = y.value_counts().rename(index=tipo_financiamiento_mapping)
+conteo_tipo_financiamiento_label = y.value_counts().rename(
+    index=tipo_financiamiento_mapping
+)
 conteo_tipo_financiamiento_label.plot.pie()
 y.value_counts()
 
@@ -1745,22 +1904,19 @@ y.value_counts()
 
 # Define the steps of the pipeline
 # Calculating class counts
-class_counts = data_frame_tipo_financiamiento['tipo_financiamiento'].value_counts()
+class_counts = data_frame_tipo_financiamiento["tipo_financiamiento"].value_counts()
 
 # Setting sampling strategy
-sampling_strategy = {3:int(class_counts.max() * 0.30), 1:int(class_counts[1]*0.20)}
+sampling_strategy = {3: int(class_counts.max() * 0.30), 1: int(class_counts[1] * 0.20)}
 
 # Undersampling with RandomUnderSampler
 rand_under = RandomUnderSampler(sampling_strategy=sampling_strategy)
 
 # Oversampling with SMOTE
-smote_over = SMOTE(sampling_strategy='not majority', k_neighbors=5, random_state=42)
+smote_over = SMOTE(sampling_strategy="not majority", k_neighbors=5, random_state=42)
 
 # Steps for addressing imbalance
-steps_imbalance = [
-    ('sampling_under', rand_under),
-    ('sampling', smote_over)
-]
+steps_imbalance = [("sampling_under", rand_under), ("sampling", smote_over)]
 
 # Create the pipeline
 pipeline_fix_imbalance = Pipeline(steps_imbalance)
@@ -1771,10 +1927,10 @@ X_reshaped, y_reshaped = pipeline_fix_imbalance.fit_resample(X, y)
 
 """*Implementa un gráfico tipo pie que muestre cómo lucen los datos después de realizar el tratamiento para abordar el desbalance.*"""
 
-#Write your code here
-#conteo_tipo_financiamiento_label = y_reshaped.value_counts().rename(index=tipo_financiamiento_mapping)
-#conteo_tipo_financiamiento_label.plot.pie()
-#y_reshaped.value_counts()
+# Write your code here
+# conteo_tipo_financiamiento_label = y_reshaped.value_counts().rename(index=tipo_financiamiento_mapping)
+# conteo_tipo_financiamiento_label.plot.pie()
+# y_reshaped.value_counts()
 
 """*Separa los datos en conjuntos de entrenamiento y test utilizando la función `startified_train_test_split()`. Luego, implementa un modelo que haga uso del siguiente clasificador. Puedes probar modificando los hiperparámetros y evaluar los resultados. También puedes optar por modificar los parámetros de las clases `RandomUnderSampler` y `SMOTE` del paso anterior.*
 
@@ -1813,29 +1969,33 @@ GradientBoostingClassifier(
 
 # Define the steps for the pipeline
 steps_gradient_boost = [
-    ('sampling_under', rand_under),  # Undersampling
-    ('sampling_over', smote_over),    # Oversampling
-    ('clf', GradientBoostingClassifier(
-        ccp_alpha=0.0,
-        criterion='friedman_mse',
-        init=None,
-        learning_rate=0.1,
-        loss='log_loss',
-        max_depth=3,
-        max_features=None,
-        max_leaf_nodes=None,
-        min_impurity_decrease=0.0,
-        min_samples_leaf=1,
-        min_samples_split=2,
-        min_weight_fraction_leaf=0.0,
-        n_estimators=100,
-        n_iter_no_change=None,
-        random_state=8860,
-        subsample=1.0,
-        tol=0.0001,
-        validation_fraction=0.1,
-        verbose=0,
-        warm_start=False))  # Example classifier
+    ("sampling_under", rand_under),  # Undersampling
+    ("sampling_over", smote_over),  # Oversampling
+    (
+        "clf",
+        GradientBoostingClassifier(
+            ccp_alpha=0.0,
+            criterion="friedman_mse",
+            init=None,
+            learning_rate=0.1,
+            loss="log_loss",
+            max_depth=3,
+            max_features=None,
+            max_leaf_nodes=None,
+            min_impurity_decrease=0.0,
+            min_samples_leaf=1,
+            min_samples_split=2,
+            min_weight_fraction_leaf=0.0,
+            n_estimators=100,
+            n_iter_no_change=None,
+            random_state=8860,
+            subsample=1.0,
+            tol=0.0001,
+            validation_fraction=0.1,
+            verbose=0,
+            warm_start=False,
+        ),
+    ),  # Example classifier
 ]
 
 # Create the pipeline for Gradient Boosting
@@ -1850,11 +2010,11 @@ steps_gradient_boost = [
 """Evaluemos los resultados del modelo."""
 
 # Print classifitacion report
-clas_report=classification_report(y_test,y_pred,labels=np.unique(y_pred), digits=6)
+clas_report = classification_report(y_test, y_pred, labels=np.unique(y_pred), digits=6)
 print(clas_report)
 
 # Plot confusion matrix
-plot_confusion_matrix(confusion_matrix(y_test, y_pred),tipo_financiamiento_mapping)
+plot_confusion_matrix(confusion_matrix(y_test, y_pred), tipo_financiamiento_mapping)
 
 """# Pregunta 4
 * *¿Cuál de los modelos consideras que es más eficiente en términos de rendimiento y por qué?*
