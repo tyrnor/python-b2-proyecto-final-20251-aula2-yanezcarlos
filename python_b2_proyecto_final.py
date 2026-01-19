@@ -2110,8 +2110,25 @@ plot_confusion_matrix(confusion_matrix(y_test, y_pred), tipo_financiamiento_mapp
 
 """# Pregunta 4
 * *¿Cuál de los modelos consideras que es más eficiente en términos de rendimiento y por qué?*
+
+El modelo más eficiente es Gradient Boosting con datos balanceados, ya que logra un rendimiento más uniforme
+entre todas las clases, evitando el sesgo hacia la clase mayoritaria y mejorando el recall de las clases
+minoritarias.
+
 * *Luego de evaluar los diferentes modelos, como científico de datos, ¿cuál sugerirías implementar y por qué? Justifica tu respuesta.*
+
+Se recomienda Gradient Boosting con RandomUnderSampler y SMOTE, porque aunque la exactitud global es ligeramente
+menor, el modelo clasifica correctamente todas las clases, lo que es más adecuado para un problema multiclase
+desbalanceado.
+
 * *Investiga qué otras opciones pueden ser utilizadas para enfrentar el problema de datos desbalanceados e implementa un ejemplo.*
+
+Se pueden usar pesos de clase (class_weight), métodos de sobremuestreo como ADASYN, submuestreo inteligente o
+modelos diseñados para datos desbalanceados como Balanced Random Forest.
+
 * *Investiga qué son los modelos de ensamble e implementa un corto ejemplo.*
+
+Los modelos de ensamble combinan varios modelos para mejorar la predicción y reducir errores.
+Ejemplos de modelos de ensamble son Random Forest y Gradient Boosting.
 
 """
