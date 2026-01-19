@@ -352,7 +352,7 @@ def plot_accuracy_scores(
     return train_scores
 
 
-def startified_train_test_split(X, Y, n_splits=1, test_size=0.2, random_state=42):
+def startified_train_test_split(X, y, n_splits=1, test_size=0.2, random_state=42):
     # Assuming X and y are your feature matrix and target variable respectively
 
     # Initialize StratifiedShuffleSplit
@@ -2013,9 +2013,15 @@ X_reshaped, y_reshaped = pipeline_fix_imbalance.fit_resample(X, y)
 """*Implementa un gráfico tipo pie que muestre cómo lucen los datos después de realizar el tratamiento para abordar el desbalance.*"""
 
 # Write your code here
-# conteo_tipo_financiamiento_label = y_reshaped.value_counts().rename(index=tipo_financiamiento_mapping)
-# conteo_tipo_financiamiento_label.plot.pie()
-# y_reshaped.value_counts()
+conteo_tipo_financiamiento_label = y_reshaped.value_counts().rename(index=tipo_financiamiento_mapping)
+fig, ax = plt.subplots()
+conteo_tipo_financiamiento_label.plot.pie(
+    autopct="%1.1f%%",
+    ax=ax
+)
+ax.set_title("Distribución después de RandomUnderSampler + SMOTE")
+ax.set_ylabel("")
+plt.show()
 
 """*Separa los datos en conjuntos de entrenamiento y test utilizando la función `startified_train_test_split()`. Luego, implementa un modelo que haga uso del siguiente clasificador. Puedes probar modificando los hiperparámetros y evaluar los resultados. También puedes optar por modificar los parámetros de las clases `RandomUnderSampler` y `SMOTE` del paso anterior.*
 
@@ -2050,12 +2056,10 @@ GradientBoostingClassifier(
 # Split the data into training and testing sets with stratification
 # Stratification ensures that the class distribution is preserved in both training and testing sets
 # Write your code here
-
+X_train, X_test, y_train, y_test = startified_train_test_split(X_reshaped, y_reshaped, test_size=0.2, random_state=42)
 
 # Define the steps for the pipeline
 steps_gradient_boost = [
-    ("sampling_under", rand_under),  # Undersampling
-    ("sampling_over", smote_over),  # Oversampling
     (
         "clf",
         GradientBoostingClassifier(
@@ -2085,12 +2089,15 @@ steps_gradient_boost = [
 
 # Create the pipeline for Gradient Boosting
 # Write your code here
+pipeline_gradient_boost = Pipeline(steps_gradient_boost)
 
 # Train the model using fit
 # Write your code here
+pipeline_gradient_boost.fit(X_train, y_train)
 
 # Make predictions
 # Write your code here
+y_pred = pipeline_gradient_boost.predict(X_test)
 
 """Evaluemos los resultados del modelo."""
 
