@@ -1588,16 +1588,15 @@ print(data_frame_tipo_financiamiento["tipo_financiamiento"].value_counts())
 
 # Write you code here, add your custom plot
 data_frame_tipo_financiamiento["tipo_financiamiento"].value_counts().plot(
-    kind = "bar",
-    title = "Distribución de la variable objetivo: tipo_financiamineto"
+    kind="bar", title="Distribución de la variable objetivo: tipo_financiamineto"
 )
 plt.xlabel("Tipo de financiamiento")
 plt.ylabel("Número de registros")
 plt.show()
 
-# El problema corresponde a uno de clasificación multiclase, ya que la variable objetivo 'tipo_financiamiento' 
+# El problema corresponde a uno de clasificación multiclase, ya que la variable objetivo 'tipo_financiamiento'
 # toma valores discretos que representan diferentes categorías.
-# Al observar el conteo de clases, se identifica un desbalance en los datos, siendo la clase asociada a "Ambos" 
+# Al observar el conteo de clases, se identifica un desbalance en los datos, siendo la clase asociada a "Ambos"
 # la más frecuente, mientras que otras categorías presentan menor número de registros.
 
 """## Pasos para el entrenamiento de modelos
@@ -1636,10 +1635,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 # Create the custom model
 # You can customize the parameters based on your requirements
 # Write you code here
-rf_model = RandomForestClassifier(
-    n_estimators=100,
-    random_state=42
-)
+rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
 
 # Train the model on the training data
 # Write you code here
@@ -1657,7 +1653,7 @@ accuracy_rf = accuracy_score(y_test, y_pred_rf)
 print("Accuracy Random Forest:", accuracy_rf)
 
 # Plot accuracy the model over the time - use plot_accuracy_scores
-plot_accuracy_scores(rf_model,X_train,y_train,X_test,y_test,nparts=5,jobs=2)
+plot_accuracy_scores(rf_model, X_train, y_train, X_test, y_test, nparts=5, jobs=2)
 
 # Print classifitacion report using classification_report
 print(classification_report(y_test, y_pred_rf, digits=6))
@@ -1750,19 +1746,15 @@ Ahora vamos a desarrollar validaciones para ver cuáles características son má
 
 def plot_correlations(df_temp):
     # Write your code here
-    plt.figure(figsize=(16,12))
+    plt.figure(figsize=(16, 12))
 
     corr_matrix = df_temp.corr()
 
-    sns.heatmap(
-        corr_matrix,
-        cmap="coolwarm",
-        center=0,
-        linewidths=0.5
-    )
+    sns.heatmap(corr_matrix, cmap="coolwarm", center=0, linewidths=0.5)
 
     plt.title("Correlation Matrix of Features")
     plt.show()
+
 
 # Write your code here, plot using plot_correlations
 plot_correlations(data_frame_tipo_financiamiento)
@@ -1812,9 +1804,7 @@ def get_most_important_features(correlation_matrix, target_column, n=5):
 correlation_matrix = data_frame_tipo_financiamiento.corr()
 
 top_features = get_most_important_features(
-    correlation_matrix=correlation_matrix,
-    target_column="tipo_financiamiento",
-    n=6
+    correlation_matrix=correlation_matrix, target_column="tipo_financiamiento", n=6
 )
 
 print("Top 6 most important features related to tipo_financiamiento")
@@ -1824,6 +1814,12 @@ print(top_features)
 
 ## Pregunta
 *¿Qué es el análisis de componentes principales y cuál es su utilidad al implementar modelos de machine learning?*
+
+El análisis de componentes principales (PCA) es un técnica de reducción de dimensionalidad que transforma un conjunto de variables
+originales correlacionadas en un nuevo conjunto de variables no correlacionadas llamadas componentes principales.
+
+Su utilidad en machine learning radica en que permite reducir la complejidad de los datos, eliminar redundancia entre variables, 
+disminuir el ruido y mejorar la eficiencia computacional de los modelos, manteniendo la mayor cantidad posible de información relevante.
 
 *Modifica la función `create_pca_model`. Los parámetros de entrada son el conjunto de datos sin la variable a predecir. Se creará un modelo de Análisis de Componentes Principales (PCA), el cual tendrá como parámetro el número N de componentes a identificar. El resultado será el modelo exportado y la transformación hacia las componentes principales luego de evaluar el modelo.*
 
@@ -1849,12 +1845,15 @@ def create_pca_model(X_train, n_components):
     """
     # Instantiate PCA
     # Write your code here
-    pca_model = None
+    pca_model = PCA(n_components=n_components)
 
     # Fit PCA to the training data and transform features
     # Write your code here
-    X_principal = None
+    X_transformed = pca_model.fit_transform(X_train)
 
+    X_principal = pd.DataFrame(
+        X_transformed, columns=[f"PC{i+1}" for i in range(n_components)]
+    )
     # Return pca_model,X_principal
     return pca_model, X_principal
 
@@ -1873,10 +1872,15 @@ df_pca_components = get_pca_components(
     pca_model,
     data_frame_tipo_financiamiento.drop(columns=["tipo_financiamiento"]).columns,
 )
-df_pca_components
+print(df_pca_components.head())
 
 """## Pregunta
 *Compara las variables obtenidas después de realizar el PCA en el conjunto de datos con las variables identificadas a través de la matriz de confusión. ¿Has encontrado coincidencias entre las variables y qué conclusiones puedes extraer de esto?*
+
+Tras aplicar PCA, se observa que variables como AGE_RANGE, INCOME_RANGE, Regiao e Idade dominan las primeras componentes principales. 
+Estas variables coinciden con las identificadas previamente como relevantes mediante la matriz de correlación, lo que indica que 
+concentran gran parte de la varianza del conjunto de datos y son factores clave para explicar el tipo de financiamiento. 
+Esto valida el uso de PCA como técnica de reducción de dimensionalidad sin pérdida significativa de información relevante.
 
 Vamos a graficar la curva conocida como codo (elbow curve) utilizando la función `plot_elbow_curve_pca`.
 """
@@ -1885,6 +1889,17 @@ plot_elbow_curve_pca(X_principal)
 
 """## Pregunta
 *Primero, investiga para qué sirve la curva conocida como codo (elbow curve). Luego, responde a la pregunta: ¿Cuántos componentes principales (columnas) puedes sugerir que sean utilizados por algún modelo de Machine Learning?*
+
+La curva del codo (elbow curve) se utiliza para determinar el número óptimo de componentes principales en PCA, 
+identificando el punto a partir del cual añadir más componentes no aporta una mejora significativa en la información explicada.
+
+En este caso, el codo se observa alrededor de las 2 primeras componentes, ya que a partir de ese punto la reducción de 
+la inercia y la varianza explicada es progresivamente menor. Por ello, se recomienda utilizar 2 componentes
+principales para los modelos de Machine Learning.
+
+Aunque el uso de PCA con 2 componentes reduce la dimensionalidad, los resultados del modelo muestran una pérdida 
+de rendimiento en clases minoritarias, lo que indica que una reducción excesiva puede afectar negativamente la capacidad de
+clasificación para algunas categorías.
 
 *Establece el valor para la variable `n_components_pca`, luego ejecuta el modelo de aprendizaje, que incluye una tarea de reducción de la dimensionalidad mediante PCA (Análisis de Componentes Principales).*
 """
