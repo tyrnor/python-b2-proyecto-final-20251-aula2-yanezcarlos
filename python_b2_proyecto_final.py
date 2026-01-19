@@ -1583,8 +1583,22 @@ Utiliza técnicas de validación cruzada para obtener estimaciones más robustas
 """
 
 # Write you code here
+print("Value counts for tipo_financiamiento:")
+print(data_frame_tipo_financiamiento["tipo_financiamiento"].value_counts())
 
 # Write you code here, add your custom plot
+data_frame_tipo_financiamiento["tipo_financiamiento"].value_counts().plot(
+    kind = "bar",
+    title = "Distribución de la variable objetivo: tipo_financiamineto"
+)
+plt.xlabel("Tipo de financiamiento")
+plt.ylabel("Número de registros")
+plt.show()
+
+# El problema corresponde a uno de clasificación multiclase, ya que la variable objetivo 'tipo_financiamiento' 
+# toma valores discretos que representan diferentes categorías.
+# Al observar el conteo de clases, se identifica un desbalance en los datos, siendo la clase asociada a "Ambos" 
+# la más frecuente, mientras que otras categorías presentan menor número de registros.
 
 """## Pasos para el entrenamiento de modelos
 
