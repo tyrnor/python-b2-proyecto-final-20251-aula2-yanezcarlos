@@ -1065,6 +1065,16 @@ print("Number of records after removing outliers:", df_insurance.shape[0])
 """## Pregunta
 *Explica con tus propias palabras cómo podría afectar una diferencia significativa en el tamaño del conjunto de datos antes y después de eliminar los valores atípicos. ¿Qué implicaciones podría tener esto en los resultados de un modelo de machine learning?*
 
+Tras eliminar los datos atípicos, el conjunto de datos df_insurance ha pasado de tener 9530 registros a 8844, lo que supone una reducción significativa
+del tamaño del conjunto de datos.
+
+La reducción podría tener impacto en los modelos de machine learning, ya que si se eliminan demasiados registros, el modelo podría entrenarse con
+menos información, lo que podría afectar su capacidad para generalizar y predecir correctamente en datos nuevos.
+
+Aunque eliminar valores atípicos extremos también puede mejorar el rendimiento del modelo evitando que dichos valores distorsionen el proceso de entrenamiento.
+
+Por lo que, es crucial encontrar un equilibrio adecuado entre eliminar datos atípicos y mantener suficiente información para entrenar modelos robustos.
+
 ## Gráficos luego de eliminar datos atípicos
 
 En las siguientes gráficas, puedes observar las diferencias con respecto a las del apartado inicial "Analizar Patrones Anómalos".
@@ -1074,12 +1084,22 @@ En las siguientes gráficas, puedes observar las diferencias con respecto a las 
 
 #Write your code here
 
+plot_boxplot_violinplot(x="Regiao", y="Idade", data_frame=df_insurance)
+
 """ *Graficar la región(Regiao) en función de los ingresos(Renda), del conjunto de datos `df_insurance`, utilizando la función `plot_boxplot_violinplot`.*"""
 
 #Write your code here, add you plot using ´plot_boxplot_violinplot´
 
+plot_boxplot_violinplot(x="Regiao", y="Renda", data_frame=df_insurance)
+
 """## Pregunta
 *¿Cómo crees que la eliminación de datos atípicos ha afectado la distribución y los patrones observados en las gráficas? ¿Qué cambios específicos puedes identificar en los datos después de esta eliminación?*
+
+La eliminacion de los datos atípicos ha reducido la dispersión de las distribuciones, especialmente en la variable de ingresos, donde se
+observaban valores extremos.
+
+Tras esta limpieza, los boxplots muestran rangos más acotados y una distribución más homogénea entre regiones, lo que facilita la
+interpretación de los patrones y reduce el impacto de valores extremos en el entrenamiento de modelos de machine learning.
 
 ## Normalización y Escalado
 ### Estandarización:
